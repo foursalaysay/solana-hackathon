@@ -1,8 +1,18 @@
 
 import Link from "next/link"
 import Navbar from "./Navbar"
+import { Button } from "../ui/button"
+import { useRouter } from "next/router"
+import { useEffect } from "react";
 
 export function HomePage() {
+
+  const router = useRouter();
+
+  const navigateOfficer = () => {
+    router.push("/healthofficer");
+  }
+
   return (
     <div className="flex flex-col min-h-dvh">
       <main className="flex-1 flex items-center justify-center">
@@ -12,6 +22,9 @@ export function HomePage() {
           <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
             {/* this is for connecting wallet */}
             <Navbar />
+            <Button onClick={navigateOfficer}>
+                Health Officer
+            </Button>
           </div>
         </div>
       </main>
