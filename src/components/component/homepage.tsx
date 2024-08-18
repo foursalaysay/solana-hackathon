@@ -17,18 +17,29 @@ import { Label } from "@/components/ui/label"
 import { Button } from "../ui/button"
 import ConnectWalletButton from "./ConnectWalletButton"
 
+import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+
 
 
 export function HomePage() {
 
-  
- 
+
+const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
+const [healthCode, setHealthCode ] = useState("");
+const router = useRouter();
+
+useEffect(() => {
+  if(getHealthCode === healthCode){
+    router.push("/healthofficer")
+  }
+})
 
   return (
     <div className="flex flex-col min-h-dvh">
       <main className="flex-1 flex items-center justify-center">
         <div className="max-w-md space-y-4 text-center">
-          <h1 className="text-xl lg:text-5xl font-bold tracking-tighter">Welcome to <span className="text-red-600">Red</span>Bit</h1>
+          <h1 className="text-4xl lg:text-7xl font-bold tracking-tighter">Welcome to <span className="text-red-600">Red</span>Bit</h1>
           <p className="text-muted-foreground">Donate blood and gain bounties.</p>
           <div className="flex flex-col gap-5 justify-center items-center">
             {/* this is for connecting wallet */}
@@ -50,14 +61,15 @@ export function HomePage() {
                       Link
                     </Label>
                     <Input
-                      id="link"
+                      value={healthCode}
+                      onChange={(e) => setHealthCode(e.target.value)}
                     />
                   </div>
                 </div>
                 <DialogFooter className="sm:justify-start">
                   <DialogClose asChild>
-                    <Button type="submit" variant="secondary" className="w-full bg-red-600 text-white hover:text-black hover:border">
-                      Close
+                    <Button type="submit" variant="secondary" className="w-full bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2">
+                      Proceed
                     </Button>
                   </DialogClose>
                 </DialogFooter>
