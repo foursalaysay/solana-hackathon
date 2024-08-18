@@ -14,7 +14,6 @@ const Navbar = () => {
 
   return (
     <div className=' flex items-center justify-around mt-10'>
-        <h1>User Profile</h1>
         <WalletMultiButtonDynamic>
             {wallet.publicKey ? `${wallet.publicKey.toBase58().substring(0,8)}...` : "Connect Wallet"}
         </WalletMultiButtonDynamic>
