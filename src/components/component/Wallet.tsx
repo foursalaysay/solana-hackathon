@@ -6,8 +6,8 @@ import {
 } from '@solana/wallet-adapter-react';
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui';
 import {
-  AlphaWalletAdapter,
-  LedgerWalletAdapter,
+  // AlphaWalletAdapter,
+  // LedgerWalletAdapter,
   SolflareWalletAdapter,
 } from '@solana/wallet-adapter-wallets';
 import { FC, useMemo } from 'react';
@@ -25,8 +25,8 @@ export const Wallet: FC<Props> = ({ children }) => {
   const wallets = useMemo(
     () => [
       new SolflareWalletAdapter(),
-      new AlphaWalletAdapter(),
-      new LedgerWalletAdapter(),
+     // // new AlphaWalletAdapter(),
+      // new LedgerWalletAdapter(),
     ],
     []
   );
@@ -34,7 +34,9 @@ export const Wallet: FC<Props> = ({ children }) => {
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect={true}>
-        <WalletModalProvider>{children}</WalletModalProvider>
+          <WalletModalProvider>
+            {children}
+          </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   );
