@@ -70,9 +70,6 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
             <FormControl>
                 <Input placeholder="shadcn" {...field} />
             </FormControl>
-            <FormDescription>
-                This is your public display name.
-            </FormDescription>
             <FormMessage />
             </FormItem>
         )}
