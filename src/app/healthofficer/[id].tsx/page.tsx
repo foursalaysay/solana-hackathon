@@ -1,6 +1,6 @@
 import React from 'react'
 
-const HealthOfficerLayout = () => {
+const DonationListing = () => {
   return (
     <div>
         
@@ -8,4 +8,4 @@ const HealthOfficerLayout = () => {
   )
 }
 
-export default HealthOfficerLayout
+export default DonationListing

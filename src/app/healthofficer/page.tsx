@@ -1,5 +1,17 @@
-import HealthOfficerDropdown from '@/components/reusables/healthOfficerInfo'
+'use client'
+
+import HealthOfficerDropdown from '@/components/reusables/HealthOfficerDropdown'
 import React from 'react'
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 
 const HealthOfficer = () => {
   return (
@@ -8,6 +20,16 @@ const HealthOfficer = () => {
           <h5 className='text-lg font-bold'><span className='text-red-600'>Red</span>Bit</h5>
           <HealthOfficerDropdown />
         </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="outline">Create Donation Listing</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Edit profile</DialogTitle>
+            </DialogHeader>
+          </DialogContent>
+    </Dialog>
     </div>
   )
 }
