@@ -1,0 +1,31 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Donation {
+  id                String?      @unique @map("_id") // MongoDB's built-in _id field @unique
+  address           String
+  donationDate      DateTime     @unique
+  totalParticipants String
+  bountyAmount      String
+  // participants      Participant[]
+}
+
+model Participant {
+  id         String      @unique @map("_id") // MongoDB's built-in _id field
+  name       String
+  donationId String      // Foreign key to Donation
+  // donation   Donation    @relation(fields: [donationId], references: [id])
+}

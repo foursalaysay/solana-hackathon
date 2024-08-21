@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { CreateDonationList } from '@/components/reusables/CreateDonationList'
+import { Separator } from '@/components/ui/separator'
 
 const HealthOfficer = () => {
   return (
@@ -25,10 +26,11 @@ const HealthOfficer = () => {
           <DialogTrigger asChild>
             <Button className="w-full bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2 hover:bg-white">Create Donation Listing</Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px] border-2 border-red-600">
             <DialogHeader>
               <DialogTitle>Blood Donation Listing</DialogTitle>
             </DialogHeader>
+            <Separator />
             {/* THIS COMPONENT IS FOR CREATING THE DONATION LISTING */}
             <CreateDonationList />
           </DialogContent>

@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
+import React from "react"
 
 import {
   Popover,
@@ -25,8 +26,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { CalendarIcon } from "lucide-react"
-import { format } from "util"
-import { GooglePlaces } from "./GooglePlaces"
+import { format } from "date-fns"
+import { saveDonation } from "../../../server/actions/SavetoDatabase"
+
 
 const DonationSchema = z.object({
   address: z.string().min(2, {
@@ -35,7 +37,7 @@ const DonationSchema = z.object({
   donationDate : z.date({
     required_error: "Date is required.",
   }),
-  totalParticipants : z.number(),
+  totalParticipants : z.string(),
   bountyAmount : z.string()
 })
 
@@ -45,25 +47,40 @@ export function CreateDonationList() {
     defaultValues: {
       address: "",
       donationDate : new Date(),
-      totalParticipants : 0,
+      totalParticipants : "",
       bountyAmount : ""
     },
   })
 
-  function onSubmit(data: z.infer<typeof DonationSchema>) {
+ async function onSubmit(data: z.infer<typeof DonationSchema>) {
+
+  try {
+    // Save the donation
+    const createdListing = await saveDonation(data);
+    
+    // Display success toast
     toast({
-      title: "You submitted the following values:",
+      title: "Submission Successful",
       description: (
         <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
-    })
+    });
+  } catch (error) {
+    console.error("Error saving donation:", error);
+    
+    // Display error toast
+    toast({
+      title: "Submission Failed",
+      description: "There was an error submitting your data.",
+    });
+  }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
         <FormField
         control={form.control}
         name="address"
@@ -71,10 +88,7 @@ export function CreateDonationList() {
             <FormItem>
             <FormLabel>Address</FormLabel>
             <FormControl>
-                <GooglePlaces 
-                    value={field.value}
-                    onChange={field.onChange}
-                />
+               <Input {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -82,37 +96,37 @@ export function CreateDonationList() {
         />
         {/* THIS IS FOR THE DATE */}
         <FormField
-        control={form.control}
-        name="donationDate"
+          control={form.control}
+          name="donationDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of Donation</FormLabel>
+              <FormLabel>Donation Date</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
                       variant={"outline"}
                       className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
+                        "w-full pl-3 text-left font-normal",
                         !field.value && "text-muted-foreground"
                       )}
                     >
-                    {field.value ? (
-                            format(new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }))
-                        ) : (
-                            <span>Pick A Date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      {field.value ? (
+                         format(field.value, 'MMM dd, yyyy') 
+                      ) : (
+                        <span>Pick a date</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>
-                    </FormControl>
+                  </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={(date : Date) =>
-                        date < new Date()    
+                    disabled={(date) =>
+                      date < new Date() 
                     }
                     initialFocus
                   />
@@ -148,7 +162,7 @@ export function CreateDonationList() {
                 </FormItem>
             )}
         />
-        <Button type="submit">Create Donation Listing</Button>
+        <Button type="submit" className="w-full">Create Donation Listing</Button>
       </form>
     </Form>
   )
