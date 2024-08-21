@@ -23,7 +23,7 @@ const HealthOfficer = () => {
         </div>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline">Create Donation Listing</Button>
+            <Button className="w-full bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2 hover:bg-white">Create Donation Listing</Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>

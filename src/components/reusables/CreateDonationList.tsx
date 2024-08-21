@@ -26,6 +26,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { CalendarIcon } from "lucide-react"
 import { format } from "util"
+import { GooglePlaces } from "./GooglePlaces"
 
 const DonationSchema = z.object({
   address: z.string().min(2, {
@@ -70,7 +71,10 @@ export function CreateDonationList() {
             <FormItem>
             <FormLabel>Address</FormLabel>
             <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <GooglePlaces 
+                    value={field.value}
+                    onChange={field.onChange}
+                />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -82,7 +86,7 @@ export function CreateDonationList() {
         name="donationDate"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Date of birth</FormLabel>
+              <FormLabel>Date of Donation</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -93,14 +97,14 @@ export function CreateDonationList() {
                         !field.value && "text-muted-foreground"
                       )}
                     >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    {field.value ? (
+                            format(new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }))
+                        ) : (
+                            <span>Pick A Date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                     </Button>
-                  </FormControl>
+                    </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
@@ -108,15 +112,12 @@ export function CreateDonationList() {
                     selected={field.value}
                     onSelect={field.onChange}
                     disabled={(date : Date) =>
-                      date > new Date() || date < new Date("1900-01-01")
+                        date < new Date()    
                     }
                     initialFocus
                   />
                 </PopoverContent>
               </Popover>
-              <FormDescription>
-                Your date of birth is used to calculate your age.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
