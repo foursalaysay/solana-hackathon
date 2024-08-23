@@ -19,7 +19,7 @@ import { useState, useEffect } from 'react'
 import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard'
 
 const HealthOfficer = () => {
-
+ 
   
 
   return (
@@ -29,8 +29,7 @@ const HealthOfficer = () => {
           <HealthOfficerDropdown />
         </div>
         <div className='px-5'>
-          {loading && <p>Loading...</p>}
-            <DonationListCard donations={donations}/>
+           
         </div>
         <Dialog>
           <DialogTrigger asChild>

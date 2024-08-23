@@ -16,38 +16,7 @@ export interface DonationListCardProps {
   donations: DLCProps[];
 }
 
-const [donations, setDonations ] = useState<DLCProps[]>([]);
-  const [loading, setLoading] = useState(true);
-  // GETTING ALL BLOOD DONATIONS PRESENT
-  useEffect(() => {
-    const fetchDonations = async () => {
-      try {
-        const response = await fetch('/api/healthofficer', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json', // Optional, specify if needed
-          },
-        });
 
-        if (!response.ok) {
-          // Log detailed error information
-          const errorText = await response.text();
-          console.error('Fetch error:', errorText);
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        setDonations(data.donations);
-       
-      } catch (error: any) {
-        console.error('Failed to fetch donations:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDonations();
-  }, []);
 
 const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => (
   <>
