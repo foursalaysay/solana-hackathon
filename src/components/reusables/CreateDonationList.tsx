@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { cn } from "@/lib/utils"
 import { Calendar } from "@/components/ui/calendar"
-import React from "react"
+import React, { useState } from "react"
 
 import {
   Popover,
@@ -27,6 +27,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
+
+
+import { useEffect } from 'react'
+
 // import { saveDonation } from "../../../server/actions/SavetoDatabase"
 
 
@@ -52,10 +56,9 @@ export function CreateDonationList() {
     },
   })
 
- async function onSubmit(data: z.infer<typeof DonationSchema>) {
+async function onSubmit(data: z.infer<typeof DonationSchema>) {
 
   try {
-    // Save the donation
     const response = await fetch('/api/healthofficer', {
       method: 'POST',
       headers: {
@@ -64,19 +67,21 @@ export function CreateDonationList() {
       body: JSON.stringify(data),
     });
     
-    // Display success toast
-    toast({
-      title: "Submission Successful",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    if(response.ok){
+      const result = await response.json();
+      console.log(result);
+
+      toast({
+        title: "Submission Successful",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(result, null, 2)}</code>
+          </pre>
+        ),
+      });
+    }
   } catch (error) {
     console.error("Error saving donation:", error);
-    
-    // Display error toast
     toast({
       title: "Submission Failed",
       description: "There was an error submitting your data.",
@@ -94,7 +99,7 @@ export function CreateDonationList() {
             <FormItem>
             <FormLabel>Address</FormLabel>
             <FormControl>
-               <Input {...field} />
+              <Input {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -149,7 +154,7 @@ export function CreateDonationList() {
                 <FormItem>
                 <FormLabel>Total Participants Required</FormLabel>
                 <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="50" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>
@@ -162,13 +167,15 @@ export function CreateDonationList() {
                 <FormItem>
                 <FormLabel>Bounty Amount</FormLabel>
                 <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="$12 USDT" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>
             )}
         />
-        <Button type="submit" className="w-full">Create Donation Listing</Button>
+        <Button type="submit" className="w-full" onClick={() => {
+          
+        }}>Create Donation Listing</Button>
       </form>
     </Form>
   )

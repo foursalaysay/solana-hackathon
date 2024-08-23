@@ -4,8 +4,6 @@ import prisma from "../../../../prisma";
 
 
 export const POST = async (req : Request) => {
-
-
     try {
         const { address, donationDate, totalParticipants, bountyAmount } = await req.json();
 
@@ -25,7 +23,7 @@ export const POST = async (req : Request) => {
                 bountyAmount : bountyAmount
             }
         });
-        return NextResponse.json({donation}, {status: 201})
+        return NextResponse.json({donation}, {status: 200})
     } catch (error) {
         console.log(error)
 
@@ -36,3 +34,23 @@ export const POST = async (req : Request) => {
         await prisma.$disconnect();
     }
 }
+
+
+export const GET = async (req: Request) => { // Use req: Request as the parameter
+    try {
+      await ConnectToDatabase(); // Ensure your connection function is correct
+  
+      // Retrieve all donations from the database   
+      const donations = await prisma.donation.findMany();
+  
+      return NextResponse.json({ donations }, { status: 200 });
+    } catch (error) {
+      console.error('Error fetching donations:', error);
+  
+      return NextResponse.json({
+        message: 'Server Error',
+      }, { status: 500 });
+    } finally {
+      await prisma.$disconnect();
+    }
+  };
