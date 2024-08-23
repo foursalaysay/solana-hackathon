@@ -20,7 +20,8 @@ import ConnectWalletButton from "./ConnectWalletButton"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
-
+import Logo from '../../../public/logo.png'
+import Image from "next/image"
 
 export function HomePage() {
 
@@ -38,7 +39,13 @@ useEffect(() => {
   return (
     <div className="flex flex-col min-h-dvh">
       <main className="flex-1 flex items-center justify-center">
-        <div className="max-w-md space-y-4 text-center">
+        <div className="max-w-md space-y-4 text-center flex flex-col items-center">
+        <Image
+              src={Logo}
+              width={150}
+              height={150}
+              alt="logo"
+              />
           <h1 className="text-4xl lg:text-7xl font-bold tracking-tighter">Welcome to <span className="text-red-600">Red</span>Bit</h1>
           <p className="text-muted-foreground">Donate blood and gain bounties.</p>
           <div className="flex flex-col gap-5 justify-center items-center">

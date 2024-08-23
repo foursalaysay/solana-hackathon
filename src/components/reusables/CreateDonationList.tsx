@@ -27,7 +27,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
-import { saveDonation } from "../../../server/actions/SavetoDatabase"
+// import { saveDonation } from "../../../server/actions/SavetoDatabase"
 
 
 const DonationSchema = z.object({
@@ -56,7 +56,13 @@ export function CreateDonationList() {
 
   try {
     // Save the donation
-    const createdListing = await saveDonation(data);
+    const response = await fetch('/api/healthofficer', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
     
     // Display success toast
     toast({
@@ -112,7 +118,7 @@ export function CreateDonationList() {
                       )}
                     >
                       {field.value ? (
-                         format(field.value, 'MMM dd, yyyy') 
+                        format(field.value, 'MMM dd, yyyy') 
                       ) : (
                         <span>Pick a date</span>
                       )}
