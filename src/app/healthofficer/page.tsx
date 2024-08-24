@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog"
 import { CreateDonationList } from '@/components/reusables/CreateDonationList'
 import { Separator } from '@/components/ui/separator'
-import HealthOfficerNavbar from '@/components/reusables/HealthOfficerNavbar'
+import HealthOfficerNavbar from '@/components/reusables/Navbar'
 import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard'
 
 const HealthOfficer = () => {

@@ -3,7 +3,7 @@
 import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard';
 import React from 'react'
 import { useState, useEffect } from 'react';
-import HealthOfficerNavbar from '@/components/reusables/HealthOfficerNavbar';
+import HealthOfficerNavbar from '@/components/reusables/Navbar';
 
 
 

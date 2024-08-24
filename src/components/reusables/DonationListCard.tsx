@@ -4,7 +4,7 @@ import React from 'react';
 import { Separator } from '../ui/separator';
 import BloodImage from './../../../public/blood.png'
 import Image from 'next/image';
-import HealthOfficerNavbar from './HealthOfficerNavbar';
+import HealthOfficerNavbar from './Navbar';
 
 export interface DLCProps {
   id: string;
