@@ -1,29 +1,33 @@
-'use server'
+'use client'
 
 import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard';
 import React from 'react'
 import { useState, useEffect } from 'react';
-import prisma from '../../../prisma';
+import HealthOfficerNavbar from '@/components/reusables/HealthOfficerNavbar';
 
-const getAllDonations = async () => {
-  const res = await fetch('/api/donation');
 
-  if (!res.ok) {
-    throw new Error('Failed to fetch donations');
-  }
 
-  const data = await res.json(); // Await the JSON parsing
-  return data;
-}
+const Donation = () => {
 
-const Donation = async () => {
+ const [donations, setDonations] = useState<DLCProps[]>([]);
 
- 
-  const donations = await getAllDonations();
-
+    useEffect(() => {
+      const getDonations = async () => {
+          try {
+            const data = await fetch('/api/donation');
+            const res = await data.json();
+            setDonations(res.donations);
+            return res;
+          } catch (error) {
+          console.log(error);
+          }
+        }
+      getDonations();
+    },[])
+  
   return (  
     <div>
-        <DonationListCard donations={donations}/>  ``
+        <DonationListCard donations={donations}/>
     </div>
   )
 }

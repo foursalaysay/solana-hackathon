@@ -1,7 +1,7 @@
 'use client'
 
 import HealthOfficerDropdown from '@/components/reusables/HealthOfficerDropdown'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -14,20 +14,31 @@ import {
 } from "@/components/ui/dialog"
 import { CreateDonationList } from '@/components/reusables/CreateDonationList'
 import { Separator } from '@/components/ui/separator'
+import HealthOfficerNavbar from '@/components/reusables/HealthOfficerNavbar'
+import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard'
 
 const HealthOfficer = () => {
- 
-  
+
+  const [donations, setDonations] = useState<DLCProps[]>([]);
+
+    useEffect(() => {
+      const getDonations = async () => {
+          try {
+            const data = await fetch('/api/donation');
+            const res = await data.json();
+            setDonations(res.donations);
+            return res;
+          } catch (error) {
+          console.log(error);
+          }
+        }
+      getDonations();
+    },[])
 
   return (
     <div className='flex flex-col items-stretch justify-center p-5'>
-        <div className='flex flex-row items-center justify-between w-full px-5 py-2'>
-          <h5 className='text-lg font-bold'><span className='text-red-600'>Red</span>Bit</h5>
-          <HealthOfficerDropdown />
-        </div>
-        <div className='px-5'>
-           
-        </div>
+        <HealthOfficerNavbar />
+        <DonationListCard donations={donations} />
         <Dialog>
           <DialogTrigger asChild>
             <Button className="w-full bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2 hover:bg-white">Create Donation Listing</Button>

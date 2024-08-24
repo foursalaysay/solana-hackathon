@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../helpers/server-helper";
 import prisma from "../../../../prisma";
 
-
-export const GET = async (req: Request) => {
+export const GET = async () => {
   try {
 
     await ConnectToDatabase();
