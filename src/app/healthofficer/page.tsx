@@ -15,9 +15,6 @@ import {
 import { CreateDonationList } from '@/components/reusables/CreateDonationList'
 import { Separator } from '@/components/ui/separator'
 
-import { useState, useEffect } from 'react'
-import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard'
-
 const HealthOfficer = () => {
  
   

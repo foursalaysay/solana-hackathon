@@ -173,9 +173,7 @@ async function onSubmit(data: z.infer<typeof DonationSchema>) {
                 </FormItem>
             )}
         />
-        <Button type="submit" className="w-full" onClick={() => {
-          
-        }}>Create Donation Listing</Button>
+        <Button type="submit" className="w-full">Create Donation Listing</Button>
       </form>
     </Form>
   )
