@@ -7,12 +7,21 @@ import { Badge } from "@/components/ui/badge";
 import { Command, CommandGroup, CommandItem } from "@/components/ui/command";
 import { Command as CommandPrimitive } from "cmdk";
 
-type Options = Record<"value" | "label", string>;
+type Options = {
+  value: string;
+  label: string;
+};
 
-export function DiseaseHistory({ options, onChange, placeholder }: any) {
+interface MeMultiSelectProps {
+  options: Options[];
+  onChange: (selected: Options[] | undefined) => void;
+  placeholder?: string;
+}
+
+export function DiseaseHistory({ options, onChange, placeholder }: MeMultiSelectProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState<Options[]>([options[4]]);
+  const [selected, setSelected] = React.useState<Options[]>([]);
   const [inputValue, setInputValue] = React.useState("");
 
   React.useEffect(() => {
@@ -36,7 +45,6 @@ export function DiseaseHistory({ options, onChange, placeholder }: any) {
             });
           }
         }
-        // This is not a default behaviour of the <input /> field
         if (e.key === "Escape") {
           input.blur();
         }
@@ -45,8 +53,9 @@ export function DiseaseHistory({ options, onChange, placeholder }: any) {
     []
   );
 
+  // Correctly filter out already selected items
   const selectables = options.filter(
-    (framework: any) => !selected.includes(framework)
+    (option) => !selected.some((s) => s.value === option.value)
   );
 
   return (
@@ -56,29 +65,26 @@ export function DiseaseHistory({ options, onChange, placeholder }: any) {
     >
       <div className="group rounded-md border border-input px-3 py-2 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
         <div className="flex flex-wrap gap-1">
-          {selected.map((framework) => {
-            return (
-              <Badge key={framework.value} variant="secondary">
-                {framework.label}
-                <button
-                  className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleUnselect(framework);
-                    }
-                  }}
-                  onMouseDown={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                  }}
-                  onClick={() => handleUnselect(framework)}
-                >
-                  <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                </button>
-              </Badge>
-            );
-          })}
-          {/* Avoid having the "Search" Icon */}
+          {selected.map((item) => (
+            <Badge key={item.value} variant="secondary">
+              {item.label}
+              <button
+                className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleUnselect(item);
+                  }
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+                onClick={() => handleUnselect(item)}
+              >
+                <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+              </button>
+            </Badge>
+          ))}
           <CommandPrimitive.Input
             ref={inputRef}
             value={inputValue}
@@ -94,24 +100,22 @@ export function DiseaseHistory({ options, onChange, placeholder }: any) {
         {open && selectables.length > 0 ? (
           <div className="absolute top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
             <CommandGroup className="h-[200px] overflow-auto">
-              {selectables.map((framework: any) => {
-                return (
-                  <CommandItem
-                    key={framework.value}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    onSelect={(value) => {
-                      setInputValue("");
-                      setSelected((prev) => [...prev, framework]);
-                    }}
-                    className={"cursor-pointer"}
-                  >
-                    {framework.label}
-                  </CommandItem>
-                );
-              })}
+              {selectables.map((item) => (
+                <CommandItem
+                  key={item.value}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                  onSelect={() => {
+                    setInputValue("");
+                    setSelected((prev) => [...prev, item]);
+                  }}
+                  className="cursor-pointer"
+                >
+                  {item.label}
+                </CommandItem>
+              ))}
             </CommandGroup>
           </div>
         ) : null}

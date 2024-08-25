@@ -24,6 +24,8 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
+import { DiseaseHistory } from "./DiseaseHistory"
+import { diseases } from "@/lib/constants/Diseases"
 
 const FormSchema = z.object({
     name : z.string().min(5, {
@@ -32,14 +34,11 @@ const FormSchema = z.object({
     address : z.string({
         message : "Address is required"
     }),
-    gender : z.enum(["Male", "Female"]),
+    gender : z.enum(["Male" || "Female"]),
     age : z.number(),
     contactEmail : z.string(),
     contactNumber : z.string(),
-
     diseaseHistory : z.string().array(),
-
-
 })
 
 export function UserForm() {
@@ -69,7 +68,7 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
         <FormField
         control={form.control}
         name="name"
@@ -135,9 +134,29 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
               </FormItem>
             )}
           />
+           <FormField
+                control={form.control}
+                name="diseaseHistory"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base">Disease History</FormLabel>
+                    <FormControl>
+                      <DiseaseHistory
+                        options={diseases}
+                        onChange={field.onChange}
+                        placeholder="Search diseases..."
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Select the diseases you have encountered.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
          <FormField
         control={form.control}
-        name="address"
+        name="contactEmail"
         render={({ field }) => (
             <FormItem>
             <FormLabel>Contact Email</FormLabel>
@@ -150,7 +169,7 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
         />
          <FormField
         control={form.control}
-        name="address"
+        name="contactNumber"
         render={({ field }) => (
             <FormItem>
             <FormLabel>Contact Number</FormLabel>
@@ -161,7 +180,7 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
             </FormItem>
         )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" className="w-full">Submit</Button>
     </form>
     </Form>
 )
