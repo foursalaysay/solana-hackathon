@@ -14,6 +14,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 
@@ -24,6 +32,7 @@ const FormSchema = z.object({
     address : z.string({
         message : "Address is required"
     }),
+    gender : z.enum(["Male", "Female"]),
     age : z.number(),
     contactEmail : z.string(),
     contactNumber : z.string(),
@@ -66,7 +75,85 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
         name="name"
         render={({ field }) => (
             <FormItem>
-            <FormLabel>Username</FormLabel>
+            <FormLabel>Name</FormLabel>
+            <FormControl>
+                <Input placeholder="shadcn" {...field} />
+            </FormControl>
+            <FormMessage />
+            </FormItem>
+        )}
+        />
+        <FormField
+        control={form.control}
+        name="address"
+        render={({ field }) => (
+            <FormItem>
+            <FormLabel>Address</FormLabel>
+            <FormControl>
+                <Input placeholder="shadcn" {...field} />
+            </FormControl>
+            <FormMessage />
+            </FormItem>
+        )}
+        />
+         <FormField
+        control={form.control}
+        name="address"
+        render={({ field }) => (
+            <FormItem>
+            <FormLabel>Age</FormLabel>
+            <FormControl>
+                <Input placeholder="shadcn" {...field} />
+            </FormControl>
+            <FormMessage />
+            </FormItem>
+        )}
+        />
+         <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>User Type</FormLabel>
+                <Select
+                  onValueChange={(value: string) => {
+                    field.onChange(value);
+                  }}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Sex" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+         <FormField
+        control={form.control}
+        name="address"
+        render={({ field }) => (
+            <FormItem>
+            <FormLabel>Contact Email</FormLabel>
+            <FormControl>
+                <Input placeholder="shadcn" {...field} />
+            </FormControl>
+            <FormMessage />
+            </FormItem>
+        )}
+        />
+         <FormField
+        control={form.control}
+        name="address"
+        render={({ field }) => (
+            <FormItem>
+            <FormLabel>Contact Number</FormLabel>
             <FormControl>
                 <Input placeholder="shadcn" {...field} />
             </FormControl>
