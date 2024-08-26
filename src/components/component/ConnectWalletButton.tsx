@@ -22,7 +22,7 @@ const ConnectWalletButton = () => {
     // Update the state based on whether the wallet is connected and has a public key
     if (connected && wallet?.publicKey) {
       setHasPublicKey(true);
-      router.push('/');
+      router.push('/userdashboard');
     } else {
       setHasPublicKey(false);
     }

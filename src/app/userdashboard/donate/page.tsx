@@ -2,7 +2,7 @@
 
 
 import { usePublicKey } from '@/components/context/PublicKeyContext'
-import { DLCProps } from '@/components/reusables/DonationListCard'
+import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard'
 import React from 'react'
 import { useState, useEffect } from 'react'
 
@@ -29,7 +29,7 @@ const UserDonation = () => {
 
   return (
     <div className='flex items-center justify-center'>
-      
+      <DonationListCard donations={donations} />
     </div>
   )
 }

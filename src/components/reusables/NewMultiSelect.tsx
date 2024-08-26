@@ -9,14 +9,14 @@ import { Command as CommandPrimitive } from "cmdk";
 
 type Options = Record<"value" | "label", string>;
 
-export function MeMultiSelect({ options, onChange, placeholder }: any) {
+export function MeMultiSeleect({ options, onChange, placeholder }: any) {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<Options[]>([options[4]]);
   const [inputValue, setInputValue] = React.useState("");
 
   React.useEffect(() => {
-    onChange?.(selected);
+    onChange(selected);
   }, [selected, onChange]);
 
   const handleUnselect = React.useCallback((item: Options) => {

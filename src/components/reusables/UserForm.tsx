@@ -26,8 +26,9 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { DiseaseHistory } from "./DiseaseHistory"
 import { diseases } from "@/lib/constants/Diseases"
-import { MeMultiSelect } from '@/components/reusables/MeMultiselect'
+
 import { skills } from "./data"
+import { MeMultiSelect } from "./MeMultiSelect"
 
 const FormSchema = z.object({
     name : z.string().min(5, {
@@ -40,7 +41,15 @@ const FormSchema = z.object({
     age : z.number(),
     contactEmail : z.string(),
     contactNumber : z.string(),
-    diseaseHistory : z.string().array(),
+    diseaseHistory :z
+      .array(
+        z.object({
+          label: z.string(),
+          value: z.string(),
+          category: z.string().optional(),
+        })
+      )
+      .optional(),
 })
 
 export function UserForm() {

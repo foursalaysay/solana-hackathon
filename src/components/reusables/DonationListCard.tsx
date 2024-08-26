@@ -4,9 +4,9 @@ import React from 'react';
 import { Separator } from '../ui/separator';
 import BloodImage from './../../../public/blood.png'
 import Image from 'next/image';
-import HealthOfficerNavbar from './Navbar';
 import { usePathname } from 'next/navigation';
 import { Button } from '../ui/button';
+import ConfirmParticipation from './ConfirmParticipation';
 
 export interface DLCProps {
   id: string;
@@ -43,11 +43,11 @@ const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
          <p className='text-sm'>Donation Date: {new Date(donation.donationDate).toDateString()}</p>
          <p className='text-sm'>Location: {donation.address}</p>
          <Separator className='mt-2'/>
-         <div className='flex flex-col lg:flex-row justify-between gap-2 mt-5'>
+         <div className='flex flex-col lg:flex-row justify-between gap-2 my-5'>
            <p className='text-xs'>Total Participants: {donation.totalParticipants}</p>
            <p className='text-xs'>Bounty Amount: {donation.bountyAmount}</p>
          </div>
-         {pathname.includes("userdashboard") ? <Button>Participate</Button> : ""}
+         {pathname.includes("userdashboard") ? <ConfirmParticipation /> : ""}
        </div>
      ))
    ) : (
