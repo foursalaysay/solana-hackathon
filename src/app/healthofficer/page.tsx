@@ -37,7 +37,8 @@ const HealthOfficer = () => {
 
   return (
     <div className='flex flex-col items-stretch justify-center p-5'>
-        <HealthOfficerNavbar />
+      <HealthOfficerNavbar />
+      <Separator />
         <DonationListCard donations={donations} />
         <Dialog>
           <DialogTrigger asChild>

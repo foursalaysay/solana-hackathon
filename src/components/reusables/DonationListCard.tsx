@@ -19,9 +19,7 @@ export interface DonationListCardProps {
 }
 
 const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => (
-  <div className='p-10 flex flex-col gap-5'>
-  <HealthOfficerNavbar />
-  <Separator />
+  <div className='p-5 flex flex-col gap-5'>
   <h1 className='text-2xl lg:text-4xl font-bold'>Donation Listing</h1>
    <div className='flex flex-wrap gap-5'>
    {Array.isArray(donations) && donations.length > 0 ? (

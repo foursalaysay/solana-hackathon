@@ -10,9 +10,12 @@ type SelectProps = {
    
 }
 
-import React from 'react'
+import React, { useState } from 'react'
 
 export default function Select({options, value, onChange } : SelectProps) {
+
+  const [chosen, setChosen] = useState([])
+
   return (
     <div>
         
