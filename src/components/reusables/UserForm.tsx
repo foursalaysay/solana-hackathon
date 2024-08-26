@@ -26,6 +26,8 @@ import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import { DiseaseHistory } from "./DiseaseHistory"
 import { diseases } from "@/lib/constants/Diseases"
+import { MeMultiSelect } from '@/components/reusables/MeMultiselect'
+import { skills } from "./data"
 
 const FormSchema = z.object({
     name : z.string().min(5, {
@@ -97,7 +99,7 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
         />
          <FormField
         control={form.control}
-        name="address"
+        name="age"
         render={({ field }) => (
             <FormItem>
             <FormLabel>Age</FormLabel>
@@ -134,7 +136,26 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
               </FormItem>
             )}
           />
-           <FormField
+            <FormField
+                control={form.control}
+                name="diseaseHistory"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-base">Skills</FormLabel>
+                    <FormControl>
+                      <MeMultiSelect
+                        options={skills}
+                        onChange={field.onChange}
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Select the skills you that you have.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+           {/* <FormField
                 control={form.control}
                 name="diseaseHistory"
                 render={({ field }) => (
@@ -153,7 +174,7 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
          <FormField
         control={form.control}
         name="contactEmail"

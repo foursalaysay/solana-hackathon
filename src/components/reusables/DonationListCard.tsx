@@ -5,6 +5,8 @@ import { Separator } from '../ui/separator';
 import BloodImage from './../../../public/blood.png'
 import Image from 'next/image';
 import HealthOfficerNavbar from './Navbar';
+import { usePathname } from 'next/navigation';
+import { Button } from '../ui/button';
 
 export interface DLCProps {
   id: string;
@@ -18,7 +20,13 @@ export interface DonationListCardProps {
   donations: DLCProps[];
 }
 
-const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => (
+
+const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
+  
+  const pathname = usePathname();
+  return(
+
+  
   <div className='p-5 flex flex-col gap-5'>
   <h1 className='text-2xl lg:text-4xl font-bold'>Donation Listing</h1>
    <div className='flex flex-wrap gap-5'>
@@ -39,6 +47,7 @@ const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => (
            <p className='text-xs'>Total Participants: {donation.totalParticipants}</p>
            <p className='text-xs'>Bounty Amount: {donation.bountyAmount}</p>
          </div>
+         {pathname.includes("userdashboard") ? <Button>Participate</Button> : ""}
        </div>
      ))
    ) : (
@@ -47,6 +56,6 @@ const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => (
  </div>
   </div>
  
-);
+  )};
 
 export default DonationListCard;
