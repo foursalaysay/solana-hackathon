@@ -23,9 +23,21 @@ model Donation {
   // participants      Participant[]
 }
 
+enum Gender {
+  MALE
+  FEMALE
+}
+
 model Participant {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   name       String
-  donationId String      // Foreign key to Donation
+  address    String
+  gender     Gender @default(MALE)
+  age        String
+  contactEmail String
+  contactNumber String
+  sampleDisease String
+  // donationId String      // Foreign key to Donation
   // donation   Donation    @relation(fields: [donationId], references: [id])
 }
+

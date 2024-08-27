@@ -37,10 +37,11 @@ const FormSchema = z.object({
     address : z.string({
         message : "Address is required"
     }),
-    gender : z.enum(["Male" || "Female"]),
-    age : z.number(),
+    gender : z.string(),
+    age : z.string(),
     contactEmail : z.string(),
     contactNumber : z.string(),
+    sampleDisease : z.string(),
     diseaseHistory :z
       .array(
         z.object({
@@ -58,23 +59,45 @@ export function UserForm() {
     defaultValues: {
     name : "",
     address : "",
-    age : 0,
+    gender : "",
+    age : "",
     contactEmail : "",
     contactNumber : "",
+    sampleDisease : "",
     diseaseHistory : []
     },
 })
 
-function onSubmit(data: z.infer<typeof FormSchema>) {
+async function onSubmit(data: z.infer<typeof FormSchema>) {
+  try {
+    const response = await fetch('/api/userdashboard', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    
+    if(response.ok){
+      const result = await response.json();
+      console.log(result);
 
+      toast({
+        title: "Submission Successful",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <code className="text-white">{JSON.stringify(result, null, 2)}</code>
+          </pre>
+        ),
+      });
+    }
+  } catch (error) {
+    console.error("Error saving donation:", error);
     toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+      title: "Submission Failed",
+      description: "There was an error submitting your data.",
+    });
+  }
   }
 
   return (
@@ -145,7 +168,21 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
               </FormItem>
             )}
           />
-            <FormField
+           <FormField
+        control={form.control}
+        name="sampleDisease"
+        render={({ field }) => (
+            <FormItem>
+            <FormLabel>Diease History</FormLabel>
+            <FormControl>
+                <Input placeholder="shadcn" {...field} />
+            </FormControl>
+            <FormMessage />
+            </FormItem>
+        )}
+        />
+          
+            {/* <FormField
                 control={form.control}
                 name="diseaseHistory"
                 render={({ field }) => (
@@ -163,7 +200,7 @@ function onSubmit(data: z.infer<typeof FormSchema>) {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
            {/* <FormField
                 control={form.control}
                 name="diseaseHistory"
