@@ -19,6 +19,7 @@ export const POST = async (req : Request) => {
     const participant = await prisma.participant.create({
         data : {
             name : name,
+            publicKey : publicKey,
             address : address,
             gender : gender,
             age : age,
