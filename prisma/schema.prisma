@@ -15,18 +15,13 @@ datasource db {
 
 
 model Donation {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  id                String         @id @default(auto()) @map("_id") @db.ObjectId
   address           String
-  donationDate      DateTime     @unique
+  donationDate      DateTime       
   totalParticipants String
   bountyAmount      String
-  // participants      Participant[]
+  participants      Participant[]
 }
-
-// enum Gender {
-//   MALE
-//   FEMALE
-// }
 
 model Participant {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
@@ -38,7 +33,29 @@ model Participant {
   contactEmail String
   contactNumber String
   sampleDisease String
-  // donationId String      // Foreign key to Donation
-  // donation   Donation    @relation(fields: [donationId], references: [id])
+
+  // CONNECTION TO DONATIONS
+  donationId      String?      @db.ObjectId
+  donation        Donation?    @relation(fields: [donationId], references: [id])
 }
+
+model BloodDonation {
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  bloodType        String   // e.g., A+, B-, O+, AB-
+  donationDate     DateTime
+  expirationDate   DateTime
+  volume           Int      // Volume in milliliters
+  screeningStatus  String   // e.g., "Passed", "Failed"
+  testResults      String?  // Results of tests, if any
+  status           String   // e.g., "Pending", "Completed", "In Use", "Discarded"
+  // donor            Participant @relation(fields: [donorId], references: [id])
+  donorId          String   @db.ObjectId
+  collectionSite   String   // Location where the blood was collected
+  storageLocation  String   // Where the blood is stored
+  transportation   String?  // Transportation details
+}
+
+
+
+
 

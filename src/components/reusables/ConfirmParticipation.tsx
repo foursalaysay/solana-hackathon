@@ -10,7 +10,7 @@ import {
     DialogClose
   } from "@/components/ui/dialog"
 import { Button } from '../ui/button'
-import { CopyIcon } from 'lucide-react'
+  
 
   
 export default function ConfirmParticipation() {
@@ -24,14 +24,14 @@ export default function ConfirmParticipation() {
             <DialogHeader>
             <DialogTitle>Share link</DialogTitle>
             <DialogDescription>
-                Anyone who has this link will be able to view this.
+                Are you sure you want to participate in donating blood?
             </DialogDescription>
             </DialogHeader>
             
             <DialogFooter className="sm:justify-start">
             <DialogClose asChild>
                 <Button type="button" variant="secondary">
-                Close
+                  Close
                 </Button>
             </DialogClose>
             </DialogFooter>
