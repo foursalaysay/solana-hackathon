@@ -30,6 +30,7 @@ model Donation {
 
 model Participant {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
+  publicKey  String
   name       String
   address    String
   gender     String
