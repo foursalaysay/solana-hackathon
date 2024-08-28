@@ -30,6 +30,10 @@ import { diseases } from "@/lib/constants/Diseases"
 import { skills } from "./data"
 import { MeMultiSelect } from "./MeMultiSelect"
 
+import { useRouter } from "next/navigation"
+import { usePublicKey } from "../context/PublicKeyContext"
+import { useState } from "react"
+
 const FormSchema = z.object({
     name : z.string().min(5, {
         message : "Name is required"
@@ -68,6 +72,10 @@ export function UserForm() {
     },
 })
 
+const router = useRouter()
+const publicKey = usePublicKey();
+const [success, setSuccess] = useState(false)
+
 async function onSubmit(data: z.infer<typeof FormSchema>) {
   try {
     const response = await fetch('/api/userdashboard', {
@@ -77,10 +85,18 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
       },
       body: JSON.stringify(data),
     });
-    
+
+
     if(response.ok){
       const result = await response.json();
       console.log(result);
+
+      setSuccess(true);
+      if(publicKey){
+        router.push(`/userdashboard/user-home/${publicKey}`);
+      }
+      console.log(publicKey)
+     
 
       toast({
         title: "Submission Successful",
@@ -247,7 +263,16 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             </FormItem>
         )}
         />
-        <Button type="submit" className="w-full">Submit</Button>
+        <Button type="submit" className="w-full" 
+        onClick={() => {
+          if(!success){
+            toast({
+              title: "Submission Successful"
+            });
+          }
+        }}
+
+        >Submit</Button>
     </form>
     </Form>
 )

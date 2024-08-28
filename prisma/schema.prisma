@@ -23,16 +23,16 @@ model Donation {
   // participants      Participant[]
 }
 
-enum Gender {
-  MALE
-  FEMALE
-}
+// enum Gender {
+//   MALE
+//   FEMALE
+// }
 
 model Participant {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   name       String
   address    String
-  gender     Gender @default(MALE)
+  gender     String
   age        String
   contactEmail String
   contactNumber String
