@@ -22,8 +22,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
+
 import { Input } from "@/components/ui/input"
-import { toast } from "@/components/ui/use-toast"
 import { DiseaseHistory } from "./DiseaseHistory"
 import { diseases } from "@/lib/constants/Diseases"
 
@@ -32,9 +32,11 @@ import { MeMultiSelect } from "./MeMultiSelect"
 
 import { useRouter } from "next/navigation"
 import { usePublicKey } from "../context/PublicKeyContext"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { toast } from 'sonner'
 
 const FormSchema = z.object({
+  publicKey : z.string(),
     name : z.string().min(5, {
         message : "Name is required"
     }),
@@ -61,6 +63,7 @@ export function UserForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+    publicKey: "",
     name : "",
     address : "",
     gender : "",
@@ -74,7 +77,12 @@ export function UserForm() {
 
 const router = useRouter()
 const publicKey = usePublicKey();
-const [success, setSuccess] = useState(false)
+
+useEffect(() => {
+  form.setValue('publicKey', publicKey!)
+}, [form, publicKey])
+
+
 
 async function onSubmit(data: z.infer<typeof FormSchema>) {
   try {
@@ -91,30 +99,21 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
       const result = await response.json();
       console.log(result);
 
-      setSuccess(true);
       if(publicKey){
-        router.push(`/userdashboard/user-home/${publicKey}`);
+        router.push(`/userdashboard/${publicKey}`);
       }
       console.log(publicKey)
-     
-
-      toast({
-        title: "Submission Successful",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <code className="text-white">{JSON.stringify(result, null, 2)}</code>
-          </pre>
-        ),
-      });
+     toast.success("Completed Profile!", {
+      position : 'top-center'
+     })
     }
   } catch (error) {
     console.error("Error saving donation:", error);
-    toast({
-      title: "Submission Failed",
-      description: "There was an error submitting your data.",
-    });
+   toast.error('Profile not completed!')
   }
   }
+
+ 
 
   return (
     <Form {...form}>
@@ -264,14 +263,6 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
         )}
         />
         <Button type="submit" className="w-full" 
-        onClick={() => {
-          if(!success){
-            toast({
-              title: "Submission Successful"
-            });
-          }
-        }}
-
         >Submit</Button>
     </form>
     </Form>
