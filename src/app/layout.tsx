@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Wallet } from '@/components/component/Wallet'
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,11 +26,12 @@ export default function RootLayout({
         src={`https://maps.googleapis.com/maps/api/js?key=${GoogleApiKey}&libraries=places`}
       ></script>
       </head>
-      <body className={inter.className}>
-        <Wallet>
-          {children}
-        </Wallet>
-        </body>
+        <body className={inter.className}>
+            <Wallet>
+              {children}
+              <Toaster />
+            </Wallet>
+          </body>
     </html>
   );
 }
