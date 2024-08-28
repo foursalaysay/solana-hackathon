@@ -6,9 +6,9 @@ import prisma from "../../../../prisma";
 
 export const POST = async (req : Request) => {
   try {
-      const { name, address, gender, age, contactEmail, contactNumber, sampleDisease } = await req.json();
+      const {publicKey, name, address, gender, age, contactEmail, contactNumber, sampleDisease } = await req.json();
 
-      if(!name || !address || !gender || !age || !contactEmail || !contactNumber || !sampleDisease ){
+      if(!publicKey || !name || !address || !gender || !age || !contactEmail || !contactNumber || !sampleDisease ){
           return NextResponse.json({
               message : "Invalid Data"
           }, {status : 422})
@@ -18,8 +18,8 @@ export const POST = async (req : Request) => {
 
     const participant = await prisma.participant.create({
         data : {
-            name : name,
             publicKey : publicKey,
+            name : name,
             address : address,
             gender : gender,
             age : age,

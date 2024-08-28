@@ -78,20 +78,17 @@ export function UserForm() {
 const router = useRouter()
 const publicKey = usePublicKey();
 
-useEffect(() => {
-  form.setValue('publicKey', publicKey!)
-}, [form, publicKey])
-
-
-
 async function onSubmit(data: z.infer<typeof FormSchema>) {
+
+  console.log(publicKey);
+
   try {
     const response = await fetch('/api/userdashboard', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({...data, publicKey}),
     });
 
 
