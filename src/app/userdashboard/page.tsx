@@ -1,43 +1,10 @@
 'use client'
 
-import { usePublicKey } from '@/components/context/PublicKeyContext'
 import { UserForm } from '@/components/reusables/UserForm';
 import { Separator } from '@/components/ui/separator';
-import { useRouter } from 'next/navigation';
-import React, { useEffect } from 'react'
-
+import React from 'react'
 
 const UserDashboard = () => {
-
-  const publicKey = usePublicKey();
-  const router = useRouter();
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const response = await fetch(`/api/userdashboard`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch participant data');
-        }
-
-        const data = await response.json();
-
-        const getName = data.name;
-
-        if(getName){
-          router.push(`/userdashboard/${publicKey}`)
-        }
-
-        console.log('Participant Data:', data.participant);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    getUser();
-  }, [publicKey, router]);
-
-
 
   return (
     <div className='flex flex-col'>
@@ -47,7 +14,6 @@ const UserDashboard = () => {
         <Separator />
         <UserForm />
       </div>
-      
     </div>
   )
 }

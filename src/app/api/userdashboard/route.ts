@@ -16,7 +16,10 @@ export const POST = async (req : Request) => {
 
     await ConnectToDatabase();
 
-    const participant = await prisma.participant.create({
+    const participant = await prisma.participant.update({
+        where : {
+            publicKey : publicKey
+        },
         data : {
             publicKey : publicKey,
             name : name,

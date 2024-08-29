@@ -11,7 +11,6 @@ export const POST = async (req : Request) => {
                 message : "Invalid Data"
             }, {status : 422})
         }
-  
       await ConnectToDatabase();
   
       const participant = await prisma.participant.create({
