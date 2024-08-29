@@ -36,7 +36,7 @@ model Participant {
 
   // CONNECTION TO DONATIONS
   donationId      String?      @db.ObjectId
-  donation        Donation?    @relation(fields: [donationId], references: [id])
+  donation        Donation?   @relation(fields: [donationId], references: [id])
 }
 
 model BloodDonation {
