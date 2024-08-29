@@ -15,15 +15,17 @@ const UserDashboard = () => {
   useEffect(() => {
     const getUser = async () => {
       try {
-        const response = await fetch(`/api/userdashboard/${publicKey}`);
+        const response = await fetch(`/api/userdashboard`);
         if (!response.ok) {
           throw new Error('Failed to fetch participant data');
         }
 
         const data = await response.json();
 
-        if (response) {
-          router.push(`/userdashboard/${publicKey}`);
+        const getName = data.name;
+
+        if(getName){
+          router.push(`/userdashboard/${publicKey}`)
         }
 
         console.log('Participant Data:', data.participant);

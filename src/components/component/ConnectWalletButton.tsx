@@ -6,6 +6,7 @@ import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { connected } from 'process';
+import { toast } from 'sonner';
 
 const WalletMultiButtonDynamic = dynamic(() =>
     import('@solana/wallet-adapter-react-ui').then((mod) => mod.WalletMultiButton),
@@ -18,15 +19,38 @@ const ConnectWalletButton = () => {
   const wallet  = useWallet();
   const { connected } = useWallet()
 
+
   useEffect(() => {
-    // Update the state based on whether the wallet is connected and has a public key
-    if (connected && wallet?.publicKey) {
-      setHasPublicKey(true);
-      router.push('/userdashboard');
-    } else {
-      setHasPublicKey(false);
+    async function saveUser() {
+      const PBkey = wallet.publicKey;
+      try {
+        const response = await fetch('/api/login', { // Ensure this path matches your API route
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ publicKey: PBkey }), // Ensure body key matches your API expectation
+        });
+
+        if (response.ok) {
+          await response.json(); // Handle or ignore the result if needed
+          router.push('/userdashboard');
+          toast.success('Participant added successfully');
+        } else {
+          const result = await response.json(); // Parse the error response
+          toast.error(result.message || 'No Wallet Connected');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error('Server Error');
+      }
     }
-  }, [connected, wallet, router]);
+
+    if (wallet.publicKey) { // Ensure you only run this when wallet.publicKey is defined
+      saveUser();
+    }
+  }, [wallet.publicKey, router]); 
+
 
   return (
     <div className='w-72'>

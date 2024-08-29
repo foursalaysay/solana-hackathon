@@ -26,13 +26,13 @@ model Donation {
 model Participant {
   id          String @id @default(auto()) @map("_id") @db.ObjectId
   publicKey  String
-  name       String
-  address    String
-  gender     String
-  age        String
-  contactEmail String
-  contactNumber String
-  sampleDisease String
+  name       String?
+  address    String?
+  gender     String?
+  age        String?
+  contactEmail String?
+  contactNumber String?
+  sampleDisease String?
 
   // CONNECTION TO DONATIONS
   donationId      String?      @db.ObjectId

@@ -40,23 +40,23 @@ export const POST = async (req : Request) => {
 }
 }
 
-export const GET = async (publicKey : string) => {
-  try {
+// export const GET = async (request: NextRequest) => {
+  
+//   try {
 
-    await ConnectToDatabase();
-        const participant = await prisma.participant.findFirst({
-            where : {
-                publicKey : publicKey
-            }
-        })
-    
-    return NextResponse.json({ participant }, { status: 200 });
-  } catch (error) {
-    console.error('Error fetching donations:', error);
-    return NextResponse.json({ message: 'Server Error' }, { status: 500 });
-  } finally {
-    await prisma.$disconnect();
-  }
-};
+//     await ConnectToDatabase();
+//         const participant = await prisma.participant.findFirst({
+//             where : {
+//                 publicKey : id
+//             }
+//         })
+//     return NextResponse.json({ participant }, { status: 200 });
+//   } catch (error) {
+//     console.error('Error fetching donations:', error);
+//     return NextResponse.json({ message: 'Server Error' }, { status: 500 });
+//   } finally {
+//     await prisma.$disconnect();
+//   }
+// };
 
 

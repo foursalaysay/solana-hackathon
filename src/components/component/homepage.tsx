@@ -1,6 +1,6 @@
 'use client'
+
 import Link from "next/link"
-import Navbar from "./ConnectWalletButton"
 
 import {
   Dialog,

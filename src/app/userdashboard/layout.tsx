@@ -14,9 +14,9 @@ export default function UserLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
           <PublicKeyProvider>
-              {children}
+            <Navbar />
+                {children}
           </PublicKeyProvider>
         </body>
     </html>

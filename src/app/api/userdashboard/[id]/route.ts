@@ -3,19 +3,19 @@ import { ConnectToDatabase } from "../../../../../helpers/server-helper";
 import prisma from "../../../../../prisma";
 import { usePublicKey } from "@/components/context/PublicKeyContext";
 
-export const GET = async (publicKey : string) => {
+export const GET = async (request: Request, { params }: { params: { id: string } }) => {
 
   try {
 
+    const { id } = params;
     await ConnectToDatabase();
-    
     
     const donations = await prisma.donation.findMany();
     const participant = await prisma.participant.findFirst({
-      where: { publicKey: publicKey },
+      where: { publicKey: id },
     });
 
-    return NextResponse.json({ donations, participant  }, { status: 200 });
+    return NextResponse.json({ donations, participant}, { status: 200 });
 
     
   } catch (error) {
