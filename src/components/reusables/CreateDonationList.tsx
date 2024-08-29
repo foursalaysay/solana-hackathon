@@ -173,7 +173,7 @@ async function onSubmit(data: z.infer<typeof DonationSchema>) {
                 </FormItem>
             )}
         />
-        <Button type="submit" className="w-full">Create Donation Listing</Button>
+        <Button type="submit" className="w-full bg-redColor text-white hover:bg-white hover:text-black hover:border-1 hover:border-redColor">Create Donation Listing</Button>
       </form>
     </Form>
   )

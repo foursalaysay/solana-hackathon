@@ -9,8 +9,6 @@ import Navbar from '@/components/reusables/Navbar';
 
 export default function UserMainPage() {
 
-    const publicKey = usePublicKey();
-
     const [donations, setDonations] = React.useState<DLCProps[]>([]);
 
     React.useEffect(() => {
@@ -29,7 +27,6 @@ export default function UserMainPage() {
 
   return (
     <div>
-        <Navbar />
         <DonationListCard donations={donations}/>
     </div>
   )

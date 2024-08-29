@@ -259,7 +259,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             </FormItem>
         )}
         />
-        <Button type="submit" className="w-full" 
+        <Button type="submit" className="w-full bg-redColor text-white hover:bg-white hover:text-redColor hover:border-2 hover:border-redColor" 
         >Submit</Button>
     </form>
     </Form>
