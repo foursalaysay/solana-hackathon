@@ -17,7 +17,6 @@ const ConnectWalletButton = () => {
   const [hasPublicKey, setHasPublicKey ] = useState(false);
   const router = useRouter();
   const wallet  = useWallet();
-  const { connected } = useWallet()
 
 
   useEffect(() => {
@@ -31,6 +30,15 @@ const ConnectWalletButton = () => {
           },
           body: JSON.stringify({ publicKey: PBkey }), // Ensure body key matches your API expectation
         });
+
+        const checkPK = await fetch('/api/login', {
+          method : 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        checkPK.ok ? router.push('/donation') : router.push('/userdashboard')
 
         if (response.ok) {
           await response.json(); // Handle or ignore the result if needed

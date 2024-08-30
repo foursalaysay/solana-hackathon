@@ -95,10 +95,6 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
     if(response.ok){
       const result = await response.json();
       console.log(result);
-
-      if(publicKey){
-        router.push(`/userdashboard/${publicKey}`);
-      }
       console.log(publicKey)
      toast.success("Completed Profile!", {
       position : 'top-center'

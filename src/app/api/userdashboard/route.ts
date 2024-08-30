@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../helpers/server-helper";
 import prisma from "../../../../prisma";
+import { ConnectionContext } from "@solana/wallet-adapter-react";
 
 
 
@@ -21,7 +22,6 @@ export const POST = async (req : Request) => {
             publicKey : publicKey
         },
         data : {
-            publicKey : publicKey,
             name : name,
             address : address,
             gender : gender,
@@ -42,6 +42,7 @@ export const POST = async (req : Request) => {
     await prisma.$disconnect();
 }
 }
+
 
 // export const GET = async (request: NextRequest) => {
   
