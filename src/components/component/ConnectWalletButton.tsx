@@ -22,31 +22,36 @@ const ConnectWalletButton = () => {
   useEffect(() => {
     async function saveUser() {
       const PBkey = wallet.publicKey;
-      try {
-        const response = await fetch('/api/login', { // Ensure this path matches your API route
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ publicKey: PBkey }), // Ensure body key matches your API expectation
-        });
 
-        const checkPK = await fetch('/api/login', {
+    
+      try {
+
+        const checkPK = await fetch(`/api/login?publicKey=${PBkey}`, {
           method : 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         });
 
-        checkPK.ok ? router.push('/donation') : router.push('/userdashboard')
+        if(checkPK.ok){
+          router.push(`/userdashboard/${PBkey}`)
+        }else{
+          const response = await fetch('/api/login', { // Ensure this path matches your API route
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ publicKey: PBkey }), // Ensure body key matches your API expectation
+          });
 
-        if (response.ok) {
-          await response.json(); // Handle or ignore the result if needed
-          router.push('/userdashboard');
-          toast.success('Participant added successfully');
-        } else {
-          const result = await response.json(); // Parse the error response
-          toast.error(result.message || 'No Wallet Connected');
+          if (response.ok) {
+            await response.json(); // Handle or ignore the result if needed
+            router.push('/userdashboard');
+            toast.success('Participant added successfully');
+          } else {
+            const result = await response.json(); // Parse the error response
+            toast.error(result.message || 'No Wallet Connected');
+          }
         }
       } catch (error) {
         console.error('Error:', error);
