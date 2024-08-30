@@ -24,7 +24,7 @@ import Image from "next/image"
 import ConnectWalletButton from "@/components/component/ConnectWalletButton"
 import { Button } from "@/components/ui/button"
 
-export function LoginPage() {
+export default function LoginPage() {
 
 
 const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
