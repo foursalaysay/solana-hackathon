@@ -6,15 +6,17 @@ import { useRouter } from 'next/navigation'
 import { usePublicKey } from '@/components/context/PublicKeyContext'
 import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard';
 import Navbar from '@/components/reusables/Navbar';
+import { useEffect } from 'react';
 
 export default function UserMainPage() {
 
     const [donations, setDonations] = React.useState<DLCProps[]>([]);
+    const publicKey = usePublicKey();
 
-    React.useEffect(() => {
+    useEffect(() => {
       const getDonations = async () => {
           try {
-            const data = await fetch('/api/donation');
+            const data = await fetch(`/api/userdashboard/${publicKey}`);
             const res = await data.json();
             setDonations(res.donations);
             return res;
@@ -23,7 +25,7 @@ export default function UserMainPage() {
           }
         }
       getDonations();
-    },[])
+    },[publicKey])
 
   return (
     <div>

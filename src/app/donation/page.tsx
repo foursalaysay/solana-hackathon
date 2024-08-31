@@ -4,6 +4,7 @@ import DonationListCard, { DLCProps } from '@/components/reusables/DonationListC
 import React from 'react'
 import { useState, useEffect } from 'react';
 import HealthOfficerNavbar from '@/components/reusables/Navbar';
+import Navbar from '@/components/reusables/Navbar';
 
 
 
@@ -27,6 +28,7 @@ const Donation = () => {
   
   return (  
     <div>
+        <Navbar />
         <DonationListCard donations={donations}/>
     </div>
   )
