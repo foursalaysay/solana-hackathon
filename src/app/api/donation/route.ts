@@ -4,6 +4,7 @@ import { ConnectToDatabase } from "../../../../helpers/server-helper";
 
 export const GET = async () => {
   try {
+    await ConnectToDatabase();
     const donations = await prisma.donation.findMany();
     return NextResponse.json({ success: true, data: donations }, { status: 200 });
   } catch (error) {
