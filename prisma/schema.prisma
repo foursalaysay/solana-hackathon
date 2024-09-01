@@ -7,48 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model BloodDonation {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
 model Donation {
-  id                String         @id @default(auto()) @map("_id") @db.ObjectId
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
   address           String
-  donationDate      DateTime       
-  totalParticipants String
   bountyAmount      String
-  participants      Participant[]
+  donationDate      DateTime @db.Date
+  totalParticipants String
 }
 
 model Participant {
-  id              String         @id @default(auto()) @map("_id") @db.ObjectId
-  publicKey       String         @unique
-  name            String?
-  address         String?
-  gender          String?
-  age             String?
-  contactEmail    String?
-  contactNumber   String?
-  sampleDisease   String?
-
-  // CONNECTION TO DONATIONS
-  donationId      String?        @db.ObjectId
-  donation        Donation?      @relation(fields: [donationId], references: [id])
-
-  // CONNECTION TO BLOOD DONATIONS
-  bloodDonations  BloodDonation[]
-}
-
-model BloodDonation {
-  id               String        @id @default(auto()) @map("_id") @db.ObjectId
-  bloodType        String        // e.g., A+, B-, O+, AB-
-  donationDate     DateTime
-  expirationDate   DateTime
-  volume           Int           // Volume in milliliters
-  screeningStatus  String        // e.g., "Passed", "Failed"
-  testResults      String?       // Results of tests, if any
-  status           String        // e.g., "Pending", "Completed", "In Use", "Discarded"
-  
-  donorId          String        @db.ObjectId
-  donor            Participant   @relation(fields: [donorId], references: [id])
-
-  collectionSite   String        // Location where the blood was collected
-  storageLocation  String        // Where the blood is stored
-  transportation   String?       // Transportation details
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  address       String
+  age           String
+  contactEmail  String
+  contactNumber String
+  gender        String
+  name          String
+  publicKey     String @unique
+  sampleDisease String
 }
