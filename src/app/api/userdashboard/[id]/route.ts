@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../../helpers/server-helper";
 import prisma from "../../../../../prisma";
-import { usePublicKey } from "@/components/context/PublicKeyContext";
 
-export const GET = async (request: Request, { params }: { params: { id: string } }) => {
+
+export const GET = async ({ params }: { params: { id: string } }) => {
 
   try {
 
@@ -25,6 +25,16 @@ export const GET = async (request: Request, { params }: { params: { id: string }
     await prisma.$disconnect();
   }
 };
+
+export const POST = async () => {
+  try {
+    
+    await ConnectToDatabase();
+    
+  } catch (error) {
+    
+  }
+}
 
 
 
