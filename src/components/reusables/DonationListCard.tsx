@@ -32,7 +32,7 @@ const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
    <div className='flex flex-wrap gap-5'>
    {Array.isArray(donations) && donations.length > 0 ? (
      donations.map((donation) => (
-       <div key={donation.id} className='flex flex-col w-72 lg:w-[460px] border-2 border-red-600 p-5 rounded-md'>
+       <div key={donation.id} className='flex flex-col w-72 lg:w-[460px] border-2 border-black p-5 rounded-md'>
         <Image
         className='w-10 h-14 self-center m-5'
         src={BloodImage}

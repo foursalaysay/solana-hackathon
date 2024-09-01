@@ -26,8 +26,8 @@ const UserDropdown = () => {
             <DropdownMenuContent className="absolute right-0">
             <DropdownMenuLabel>{`${publicKey?.substring(0,8)}...`}</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link href='healthofficer/donation'>Donations</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href='healthofficer/donation'>History</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href='userdashboard/status'>Donations</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href='userdashboard/history'>History</Link></DropdownMenuItem>
             <DropdownMenuItem><Link href='/'>Logout</Link></DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

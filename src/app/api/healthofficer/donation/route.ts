@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../prisma";
-import { ConnectToDatabase } from "../../../../helpers/server-helper";
+import { ConnectToDatabase } from "../../../../../helpers/server-helper";
+import prisma from "../../../../../prisma";
+
 
 export const GET = async () => {
   try {

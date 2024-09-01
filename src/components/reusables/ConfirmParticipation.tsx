@@ -19,7 +19,7 @@ export default function ConfirmParticipation() {
     <>
         <Dialog>
           <DialogTrigger asChild>
-              <Button variant="default" className=''>Participate</Button>
+              <Button variant="default" className='w-full bg-red-600 hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'>Participate</Button>
           </DialogTrigger>
           <DialogContent className="w-[320px] lg:w-96 rounded-md">
               <DialogHeader>
