@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../../helpers/server-helper";
 import prisma from "../../../../../prisma";
+import { usePublicKey } from "@/components/context/PublicKeyContext";
 
 
-export const GET = async ({ params }: { params: { id: string } }) => {
+export const GET = async (req :Request , { params }: { params: { id: string } }) => {
 
   try {
 
@@ -26,15 +27,18 @@ export const GET = async ({ params }: { params: { id: string } }) => {
   }
 };
 
-export const POST = async () => {
+
+export const POST = async (req : Request) => {
   try {
-    
-    await ConnectToDatabase();
-    
+    const participation = await prisma.donation.update({
+      
+    })
   } catch (error) {
     
   }
 }
+
+
 
 
 

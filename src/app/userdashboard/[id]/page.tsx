@@ -27,6 +27,8 @@ export default function UserMainPage() {
       getDonations();
     },[publicKey])
 
+    
+
   return (
     <div>
         <DonationListCard donations={donations}/>

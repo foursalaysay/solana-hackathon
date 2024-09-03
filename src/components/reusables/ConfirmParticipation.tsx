@@ -11,10 +11,29 @@ import {
   } from "@/components/ui/dialog"
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
+import { usePublicKey } from '../context/PublicKeyContext'
+import { toast } from 'sonner'
   
 
   
-export default function ConfirmParticipation() {
+export default async function ConfirmParticipation() {
+  const publicKey = usePublicKey();
+  try {
+    const saveParticipation = await fetch(`/api/userdashboard/${publicKey}`,{
+      method : 'POST',
+      headers : {
+        'Content-Type' : 'application/json',
+      }
+    });
+
+    if(saveParticipation.ok){
+      toast.success('You are listed for donation');
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
+
   return (
     <>
         <Dialog>
@@ -31,12 +50,12 @@ export default function ConfirmParticipation() {
               <Separator />
               <DialogFooter className="flex flex-col gap-2">
                 <DialogClose asChild>
-                    <Button type="button" variant="secondary" className='hover:bg-gray-200 w-28'>
+                    <Button type="button" variant="secondary" className=' w-full hover:bg-gray-200'>
                       Cancel
                     </Button>
                 </DialogClose>
                 <DialogClose asChild>
-                    <Button type="button" className='w-28 bg-redColor hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'>
+                    <Button type="button" className='w-full bg-redColor hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'>
                       Confirm
                     </Button>
                 </DialogClose>

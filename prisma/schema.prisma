@@ -33,3 +33,4 @@ model Participant {
   Donation      Donation? @relation(fields: [donationId], references: [id])
   donationId    String?   @db.ObjectId
 }
+
