@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Dialog,
     DialogContent,
@@ -11,19 +11,59 @@ import {
   } from "@/components/ui/dialog"
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
-import { usePublicKey } from '../context/PublicKeyContext'
 import { toast } from 'sonner'
-  
+import { Donation } from '@/lib/types/types'
+
+export interface setButton {
+  Donation?: Donation;
+  setButtonType : () => void;
+}
 
   
 export default async function ConfirmParticipation() {
-  const publicKey = usePublicKey();
+
+  const [participation, setParticipation ] = useState<Donation>()
+
+  useEffect(() => {
+    const getDonation = async () => {
+      try {
+        const data = await fetch(`/api/userdashboard/${publicKey}`,
+          {
+            method : "GET"
+          }
+        );
+
+        if(!data.ok){
+          throw new Error('Data not fetched!');
+        }
+        const res = await data.json();
+        setParticipation(res.participation);
+
+      } catch (error) {
+        console.log(error)
+      }
+    }
+   getDonation();
+  })
+
+  const { donationId, participantId, publicKey, name, address, age, contactEmail, contactNumber, sampleDiseases } = updatedDonation;
   try {
     const saveParticipation = await fetch(`/api/userdashboard/${publicKey}`,{
       method : 'POST',
       headers : {
         'Content-Type' : 'application/json',
-      }
+      },
+      body : JSON.stringify({
+        donationId : donationId,
+        id : participantId,
+        publicKey: publicKey,
+        name: name,
+        address: address,
+        age : age,
+        contactEmail : contactEmail,
+        contactNumber : contactNumber,
+        sampleDiseases : sampleDiseases
+      })
     });
 
     if(saveParticipation.ok){

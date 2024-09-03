@@ -37,7 +37,7 @@ export const POST = async (req : Request) => {
 
     const data = await req.json();
 
-    const { donationId, particpantId, publicKey, name, address, age, contactEmail, contactNumber, sampleDiseases} = data;
+    const { donationId, participantId, publicKey, name, address, age, contactEmail, contactNumber, sampleDiseases} = data;
 
     const updatedDonation = await prisma.donation.update({
       where: {
@@ -47,7 +47,7 @@ export const POST = async (req : Request) => {
         participants: {
           create: [
             {
-              id : particpantId,
+              id : participantId,
               publicKey: publicKey,
               name: name,
               address: address,

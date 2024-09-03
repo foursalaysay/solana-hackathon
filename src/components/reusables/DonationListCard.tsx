@@ -1,12 +1,14 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Separator } from '../ui/separator';
 import BloodImage from './../../../public/blood.png'
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import ConfirmParticipation from './ConfirmParticipation';
-import { DonationListCardProps } from '@/lib/types/types';
+import { Donation, DonationListCardProps } from '@/lib/types/types';
+import { usePublicKey } from '../context/PublicKeyContext';
+import { METHODS } from 'http';
 
 
 
@@ -14,11 +16,11 @@ import { DonationListCardProps } from '@/lib/types/types';
 const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
   
   const pathname = usePathname();
-  const [participation, setParticipation ] = useState()
+  const publicKey = usePublicKey();
+  
+ 
 
-  const handleParticipation = () => {
-    
-  }
+  
   return(
 
   
@@ -27,13 +29,13 @@ const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
    <div className='flex flex-wrap gap-5'>
    {Array.isArray(donations) && donations.length > 0 ? (
      donations.map((donation) => (
-       <div key={donation.id} className='flex flex-col w-72 lg:w-[460px] border-2 border-black p-5 rounded-md'>
+       <div key={donation.donationId} className='flex flex-col w-72 lg:w-[460px] border-2 border-black p-5 rounded-md'>
         <Image
         className='w-10 h-14 self-center m-5'
         src={BloodImage}
         alt='blood'
         />
-         <h4>ID: {`${donation.id.substring(0,12)}...`}</h4>
+         <h4>ID: {`${donation.donationId.substring(0,12)}...`}</h4>
          
          <p className='text-sm'>Donation Date: {new Date(donation.donationDate).toDateString()}</p>
          <p className='text-sm'>Location: {donation.address}</p>

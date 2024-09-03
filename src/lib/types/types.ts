@@ -1,5 +1,5 @@
 export interface Donation extends Participant{
-    id: string;
+    donationId: string;
     address: string;
     donationDate: Date;
     totalParticipants: string;
@@ -12,7 +12,7 @@ export interface DonationListCardProps {
   }
 
 export interface Participant {
-    id : string;
+    participantId : string;
     name : string;
     participantAddress : string;
     age : string,

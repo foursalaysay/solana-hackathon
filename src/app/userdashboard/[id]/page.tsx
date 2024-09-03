@@ -4,13 +4,14 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { usePublicKey } from '@/components/context/PublicKeyContext'
-import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard';
+import DonationListCard from '@/components/reusables/DonationListCard';
 import Navbar from '@/components/reusables/Navbar';
 import { useEffect } from 'react';
+import { Donation } from '@/lib/types/types';
 
 export default function UserMainPage() {
 
-    const [donations, setDonations] = React.useState<DLCProps[]>([]);
+    const [donations, setDonations] = React.useState<Donation[]>([]);
     const publicKey = usePublicKey();
 
     useEffect(() => {
@@ -26,8 +27,6 @@ export default function UserMainPage() {
         }
       getDonations();
     },[publicKey])
-
-    
 
   return (
     <div>
