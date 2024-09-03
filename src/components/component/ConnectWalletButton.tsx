@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic'
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { connected } from 'process';
 import { toast } from 'sonner';
 
 const WalletMultiButtonDynamic = dynamic(() =>
@@ -36,12 +35,12 @@ const ConnectWalletButton = () => {
         if(checkPK.ok){
           router.push(`/userdashboard/${PBkey}`)
         }else{
-          const response = await fetch('/api/login', { // Ensure this path matches your API route
+          const response = await fetch('/api/login', { 
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ publicKey: PBkey }), // Ensure body key matches your API expectation
+            body: JSON.stringify({ publicKey: PBkey }), 
           });
 
           if (response.ok) {

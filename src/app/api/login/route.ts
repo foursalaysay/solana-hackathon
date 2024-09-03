@@ -16,9 +16,9 @@ export const POST = async (req : Request) => {
       await ConnectToDatabase();
   
       const participant = await prisma.participant.create({
-          data : {
-              publicKey : publicKey
-          }
+        data : {
+            publicKey : publicKey
+        }
       });
       return NextResponse.json({participant}, {status: 200})
     } catch (error) {

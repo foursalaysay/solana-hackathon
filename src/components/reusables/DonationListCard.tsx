@@ -1,29 +1,24 @@
 'use client'
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Separator } from '../ui/separator';
 import BloodImage from './../../../public/blood.png'
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Button } from '../ui/button';
 import ConfirmParticipation from './ConfirmParticipation';
+import { DonationListCardProps } from '@/lib/types/types';
 
-export interface DLCProps {
-  id: string;
-  address: string;
-  donationDate: Date;
-  totalParticipants: string;
-  bountyAmount: string;
-}
 
-export interface DonationListCardProps {
-  donations: DLCProps[];
-}
 
 
 const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
   
   const pathname = usePathname();
+  const [participation, setParticipation ] = useState()
+
+  const handleParticipation = () => {
+    
+  }
   return(
 
   

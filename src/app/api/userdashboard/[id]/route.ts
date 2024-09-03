@@ -28,15 +28,47 @@ export const GET = async (req :Request , { params }: { params: { id: string } })
 };
 
 
+
+
+
+
 export const POST = async (req : Request) => {
   try {
-    const participation = await prisma.donation.update({
-      
+
+    const data = await req.json();
+
+    const { donationId, particpantId, publicKey, name, address, age, contactEmail, contactNumber, sampleDiseases} = data;
+
+    const updatedDonation = await prisma.donation.update({
+      where: {
+        id: donationId, // The ID of the donation you want to update
+      },
+      data: {
+        participants: {
+          create: [
+            {
+              id : particpantId,
+              publicKey: publicKey,
+              name: name,
+              address: address,
+              age : age,
+              contactEmail : contactEmail,
+              contactNumber : contactNumber,
+              sampleDisease : sampleDiseases
+            },
+          ],
+        },
+      },
+    });
+
+    return NextResponse.json(updatedDonation, {
+      status : 200
     })
   } catch (error) {
-    
+    console.log(error)
   }
 }
+
 
 
 
