@@ -15,11 +15,12 @@ import {
 import { CreateDonationList } from '@/components/reusables/CreateDonationList'
 import { Separator } from '@/components/ui/separator'
 import HealthOfficerNavbar from '@/components/reusables/Navbar'
-import DonationListCard, { DLCProps } from '@/components/reusables/DonationListCard'
+import DonationListCard from '@/components/reusables/DonationListCard'
+import { Donation } from '@/lib/types/types'
 
 const HealthOfficer = () => {
 
-  const [donations, setDonations] = useState<DLCProps[]>([]);
+  const [donations, setDonations] = useState<Donation[]>([]);
 
     useEffect(() => {
       const getDonations = async () => {

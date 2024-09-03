@@ -2,10 +2,8 @@
 
 
 import * as React from 'react'
-import { useRouter } from 'next/navigation'
 import { usePublicKey } from '@/components/context/PublicKeyContext'
 import DonationListCard from '@/components/reusables/DonationListCard';
-import Navbar from '@/components/reusables/Navbar';
 import { useEffect } from 'react';
 import { Donation } from '@/lib/types/types';
 

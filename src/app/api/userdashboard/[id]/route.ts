@@ -5,11 +5,10 @@ import { usePublicKey } from "@/components/context/PublicKeyContext";
 
 
 export const GET = async (req :Request , { params }: { params: { id: string } }) => {
-
+  await ConnectToDatabase();
   try {
-
     const { id } = params;
-    await ConnectToDatabase();
+   
     
     const donations = await prisma.donation.findMany();
     const participant = await prisma.participant.findFirst({
@@ -26,10 +25,6 @@ export const GET = async (req :Request , { params }: { params: { id: string } })
     await prisma.$disconnect();
   }
 };
-
-
-
-
 
 
 export const POST = async (req : Request) => {

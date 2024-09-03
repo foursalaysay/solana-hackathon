@@ -16,12 +16,6 @@ const DonationListCard: React.FC<DonationListCardProps> = (donations : DonationL
   
   const pathname = usePathname();
   const publicKey = usePublicKey();
-  const [selectedDonation, setSelectedDonation] = useState<Donation>();
-
-  const saveDonation = (donation : Donation) => {
-    setSelectedDonation(donation);
-  }
-
   
   return(
 
