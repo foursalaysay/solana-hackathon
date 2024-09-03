@@ -12,7 +12,7 @@ import { usePublicKey } from '../context/PublicKeyContext';
 
 
 
-const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
+const DonationListCard: React.FC<DonationListCardProps> = (donations : DonationListCardProps) => {
   
   const pathname = usePathname();
   const publicKey = usePublicKey();
@@ -21,7 +21,6 @@ const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
   const saveDonation = (donation : Donation) => {
     setSelectedDonation(donation);
   }
- 
 
   
   return(

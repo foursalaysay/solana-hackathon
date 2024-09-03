@@ -17,10 +17,11 @@ import { usePublicKey } from '../context/PublicKeyContext'
 
 
   
-export default async function ConfirmParticipation(donation : Donation) {
-  const publicKey = usePublicKey();
+export default async function ConfirmParticipation({donation } : { donation : Donation}) {
   const [participant, setParticipant] = useState<Participant | null>(null);
 
+
+  const { donationId, participantId, publicKey,name, address, age, contactEmail, contactNumber, sampleDiseases  } = donation;
   useEffect(() => {
     const getDonation = async () => {
       try {
@@ -43,7 +44,7 @@ export default async function ConfirmParticipation(donation : Donation) {
    getDonation();
   },[publicKey])
 
-  const { donationId } = donations;
+
     try {
       const saveParticipation = await fetch(`/api/userdashboard/${publicKey}`,{
         method : 'POST',
@@ -52,7 +53,7 @@ export default async function ConfirmParticipation(donation : Donation) {
         },
         body: JSON.stringify({
           donationId,
-          id: participantId,
+          participantId,
           publicKey,
           name,
           address,
