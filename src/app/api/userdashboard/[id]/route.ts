@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../../helpers/server-helper";
 import prisma from "../../../../../prisma";
-import { usePublicKey } from "@/components/context/PublicKeyContext";
-
 
 export const GET = async (req :Request , { params }: { params: { id: string } }) => {
   await ConnectToDatabase();
@@ -31,7 +29,6 @@ export const POST = async (req : Request) => {
   try {
 
     const data = await req.json();
-
     const { donationId, participantId, publicKey, name, address, age, contactEmail, contactNumber, sampleDiseases} = data;
 
     const updatedDonation = await prisma.donation.update({
