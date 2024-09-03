@@ -1,3 +1,6 @@
+
+
+
 export interface Donation extends Participant{
     donationId: string;
     address: string;

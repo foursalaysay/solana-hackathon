@@ -12,66 +12,63 @@ import {
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 import { toast } from 'sonner'
-import { Donation } from '@/lib/types/types'
+import { Donation, Participant } from '@/lib/types/types'
+import { usePublicKey } from '../context/PublicKeyContext'
 
-export interface setButton {
-  Donation?: Donation;
-  setButtonType : () => void;
-}
 
   
-export default async function ConfirmParticipation() {
-
-  const [participation, setParticipation ] = useState<Donation>()
+export default async function ConfirmParticipation(donation : Donation) {
+  const publicKey = usePublicKey();
+  const [participant, setParticipant] = useState<Participant | null>(null);
 
   useEffect(() => {
     const getDonation = async () => {
       try {
-        const data = await fetch(`/api/userdashboard/${publicKey}`,
+        const res = await fetch(`/api/userdashboard/${publicKey}`,
           {
             method : "GET"
           }
         );
 
-        if(!data.ok){
+        if(!res.ok){
           throw new Error('Data not fetched!');
         }
-        const res = await data.json();
-        setParticipation(res.participation);
+        const data = await res.json();
+        setParticipant(data.participant);
 
       } catch (error) {
         console.log(error)
       }
     }
    getDonation();
-  })
+  },[publicKey])
 
-  const { donationId, participantId, publicKey, name, address, age, contactEmail, contactNumber, sampleDiseases } = updatedDonation;
-  try {
-    const saveParticipation = await fetch(`/api/userdashboard/${publicKey}`,{
-      method : 'POST',
-      headers : {
-        'Content-Type' : 'application/json',
-      },
-      body : JSON.stringify({
-        donationId : donationId,
-        id : participantId,
-        publicKey: publicKey,
-        name: name,
-        address: address,
-        age : age,
-        contactEmail : contactEmail,
-        contactNumber : contactNumber,
-        sampleDiseases : sampleDiseases
-      })
-    });
+  const { donationId } = donations;
+    try {
+      const saveParticipation = await fetch(`/api/userdashboard/${publicKey}`,{
+        method : 'POST',
+        headers : {
+          'Content-Type' : 'application/json',
+        },
+        body: JSON.stringify({
+          donationId,
+          id: participantId,
+          publicKey,
+          name,
+          address,
+          age,
+          contactEmail,
+          contactNumber,
+          sampleDiseases,
+        }),
+      });
 
-    if(saveParticipation.ok){
-      toast.success('You are listed for donation');
+      if(saveParticipation.ok){
+        toast.success('You are listed for donation');
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
 
 
   return (

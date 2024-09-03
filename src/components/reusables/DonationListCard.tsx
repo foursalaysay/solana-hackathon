@@ -8,7 +8,6 @@ import { usePathname } from 'next/navigation';
 import ConfirmParticipation from './ConfirmParticipation';
 import { Donation, DonationListCardProps } from '@/lib/types/types';
 import { usePublicKey } from '../context/PublicKeyContext';
-import { METHODS } from 'http';
 
 
 
@@ -17,7 +16,11 @@ const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
   
   const pathname = usePathname();
   const publicKey = usePublicKey();
-  
+  const [selectedDonation, setSelectedDonation] = useState<Donation>();
+
+  const saveDonation = (donation : Donation) => {
+    setSelectedDonation(donation);
+  }
  
 
   
@@ -44,7 +47,7 @@ const DonationListCard: React.FC<DonationListCardProps> = ({ donations }) => {
            <p className='text-xs'>Total Participants: {donation.totalParticipants}</p>
            <p className='text-xs'>Bounty Amount: {donation.bountyAmount}</p>
          </div>
-         {pathname.includes("userdashboard") ? <ConfirmParticipation /> : ""}
+         {pathname.includes("userdashboard") ? <ConfirmParticipation donation={donation} /> : ""}
        </div>
      ))
    ) : (
