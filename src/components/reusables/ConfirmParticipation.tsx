@@ -23,17 +23,7 @@ export default function ConfirmParticipation({ donation }: { donation: Donation 
   const { donationId, participantId, name, address, age, contactEmail, contactNumber, sampleDiseases } = donation;
 
   const handleConfirmParticipation = async () => {
-    if (!publicKey) {
-      toast.error('publicKey is missing');
-      return;
-    }
-
-    if (!donationId || !participantId) {
-      toast.error('Required donation or participant data is missing');
-      return;
-    }
-
-    setIsLoading(true);  // Set loading state
+    setIsLoading(true);  // Start loading
 
     try {
       const response = await fetch(`/api/userdashboard/${publicKey}`, {

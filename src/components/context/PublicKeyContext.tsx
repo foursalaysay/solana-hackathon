@@ -7,14 +7,14 @@ import { useWallet } from '@solana/wallet-adapter-react';
 const PublicKeyContext = createContext<string | null>(null);
 
 export function PublicKeyProvider({ children }: { children: React.ReactNode }) {
-    const { publicKey } = useWallet();
+    const { publicKey, connected } = useWallet(); // Also get the connection status
     const [storedPublicKey, setStoredPublicKey] = useState<string | null>(null);
 
     useEffect(() => {
-        if (publicKey) {
+        if (connected && publicKey) { // Ensure the wallet is connected before setting the publicKey
             setStoredPublicKey(publicKey.toString());
         }
-    }, [publicKey]);
+    }, [publicKey, connected]); // Re-run effect when connection status or publicKey changes
 
     return (
         <PublicKeyContext.Provider value={storedPublicKey}>
