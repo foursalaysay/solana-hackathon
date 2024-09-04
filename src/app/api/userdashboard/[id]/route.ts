@@ -2,20 +2,29 @@ import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../../helpers/server-helper";
 import prisma from "../../../../../prisma";
 
-export const GET = async (req :Request , { params }: { params: { id: string } }) => {
+
+export const GET = async (req: Request, { params }: { params: { id: string } }) => {
   await ConnectToDatabase();
   try {
     const { id } = params;
-   
     
+    // Validate the ID
+    if (!id) {
+      return NextResponse.json({ message: 'Participant ID is required' }, { status: 400 });
+    }
+
     const donations = await prisma.donation.findMany();
     const participant = await prisma.participant.findFirst({
       where: { publicKey: id },
     });
 
-    return NextResponse.json({ donations, participant}, { status: 200 });
+    // Check if participant exists
+    if (!participant) {
+      return NextResponse.json({ message: 'Participant not found' }, { status: 404 });
+    }
 
-    
+    return NextResponse.json({ donations, participant }, { status: 200 });
+
   } catch (error) {
     console.error('Error fetching donations:', error);
     return NextResponse.json({ message: 'Server Error' }, { status: 500 });

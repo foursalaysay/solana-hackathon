@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose
+  DialogClose,
 } from "@/components/ui/dialog";
 import { Button } from '../ui/button';
 import { Separator } from '../ui/separator';
@@ -17,48 +17,26 @@ import { usePublicKey } from '../context/PublicKeyContext';
 
 export default function ConfirmParticipation({ donation }: { donation: Donation }) {
   const [participant, setParticipant] = useState<Participant | null>(null);
+  const [isLoading, setIsLoading] = useState(false);  // Loading state
   const publicKey = usePublicKey();
-  
+
   const { donationId, participantId, name, address, age, contactEmail, contactNumber, sampleDiseases } = donation;
-
-  useEffect(() => {
-    console.log("Public Key:", publicKey); // Debugging log
-
-    if (!publicKey) {
-      console.error("publicKey is null or undefined");
-      return; // Exit if publicKey is not available
-    }
-    try {
-    const getDonation = async () => {
-    
-        const res = await fetch(`/api/userdashboard/${publicKey}`, {
-          method: "GET"
-        });
-
-        if (!res.ok) {
-          throw new Error('Data not fetched!');
-        }
-
-        const data = await res.json();
-        setParticipant(data.participant);
-
-    }
-    getDonation();
-  } catch (error) {
-    console.log(error);
-  };
-
-   
-  }, [publicKey]); // Run the effect only when publicKey changes
 
   const handleConfirmParticipation = async () => {
     if (!publicKey) {
       toast.error('publicKey is missing');
-      return; // Exit early if publicKey is missing
+      return;
     }
 
+    if (!donationId || !participantId) {
+      toast.error('Required donation or participant data is missing');
+      return;
+    }
+
+    setIsLoading(true);  // Set loading state
+
     try {
-      const saveParticipation = await fetch(`/api/userdashboard/${publicKey}`, {
+      const response = await fetch(`/api/userdashboard/${publicKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,14 +54,18 @@ export default function ConfirmParticipation({ donation }: { donation: Donation 
         }),
       });
 
-      if (saveParticipation.ok) {
+      const result = await response.json();
+
+      if (response.ok) {
         toast.success('You are listed for donation');
       } else {
-        throw new Error('Failed to save participation');
+        throw new Error(result.message || 'Failed to save participation');
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error('Failed to save participation');
+    } finally {
+      setIsLoading(false);  // Reset loading state
     }
   };
 
@@ -91,11 +73,17 @@ export default function ConfirmParticipation({ donation }: { donation: Donation 
     <>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="default" className='w-full bg-red-600 hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'>Participate</Button>
+          <Button
+            variant="default"
+            className='w-full bg-red-600 hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'
+            disabled={isLoading}  // Disable button during loading
+          >
+            {isLoading ? 'Processing...' : 'Participate'}
+          </Button>
         </DialogTrigger>
         <DialogContent className="w-[320px] lg:w-96 rounded-md">
           <DialogHeader>
-            <DialogTitle>Share link</DialogTitle>
+            <DialogTitle>Confirm Participation</DialogTitle>
             <DialogDescription>
               Are you sure you want to participate in donating blood?
             </DialogDescription>
@@ -103,7 +91,12 @@ export default function ConfirmParticipation({ donation }: { donation: Donation 
           <Separator />
           <DialogFooter className="flex flex-col gap-2">
             <DialogClose asChild>
-              <Button type="button" variant="secondary" className=' w-full hover:bg-gray-200'>
+              <Button
+                type="button"
+                variant="secondary"
+                className='w-full hover:bg-gray-200'
+                disabled={isLoading}  // Disable during loading
+              >
                 Cancel
               </Button>
             </DialogClose>
@@ -112,8 +105,9 @@ export default function ConfirmParticipation({ donation }: { donation: Donation 
                 type="button"
                 className='w-full bg-redColor hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'
                 onClick={handleConfirmParticipation}
+                disabled={isLoading}  // Disable during loading
               >
-                Confirm
+                {isLoading ? 'Processing...' : 'Confirm'}
               </Button>
             </DialogClose>
           </DialogFooter>

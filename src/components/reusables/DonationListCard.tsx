@@ -15,8 +15,6 @@ import { usePublicKey } from '../context/PublicKeyContext';
 const DonationListCard: React.FC<DonationListCardProps> = (donations : DonationListCardProps) => {
   
   const pathname = usePathname();
-  const publicKey = usePublicKey();
-  
   return(
 
   
@@ -40,7 +38,7 @@ const DonationListCard: React.FC<DonationListCardProps> = (donations : DonationL
            <p className='text-xs'>Total Participants: {donation.totalParticipants}</p>
            <p className='text-xs'>Bounty Amount: {donation.bountyAmount}</p>
          </div>
-         {pathname.includes("userdashboard") ? <ConfirmParticipation donation={donation} /> : ""}
+         {pathname.includes("userdashboard") ? <ConfirmParticipation donation={donations[donation.donationId]} /> : ""}
        </div>
      ))
    ) : (
