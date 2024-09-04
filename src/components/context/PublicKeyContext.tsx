@@ -11,10 +11,13 @@ export function PublicKeyProvider({ children }: { children: React.ReactNode }) {
     const [storedPublicKey, setStoredPublicKey] = useState<string | null>(null);
 
     useEffect(() => {
-        if (connected && publicKey) { // Ensure the wallet is connected before setting the publicKey
+        console.log("Wallet connected:", connected);
+        console.log("Public key:", publicKey?.toString());
+        if (connected && publicKey) {
             setStoredPublicKey(publicKey.toString());
         }
-    }, [publicKey, connected]); // Re-run effect when connection status or publicKey changes
+    }, [publicKey, connected]);
+    
 
     return (
         <PublicKeyContext.Provider value={storedPublicKey}>

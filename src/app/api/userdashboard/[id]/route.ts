@@ -3,19 +3,20 @@ import { ConnectToDatabase } from "../../../../../helpers/server-helper";
 import prisma from "../../../../../prisma";
 
 
-export const GET = async (req: Request, { params }: { params: { id: string } }) => {
+export const GET = async (req: Request) => {
   await ConnectToDatabase();
   try {
-    const { id } = params;
+    const url = new URL(req.url);
+    const publicKey = url.searchParams.get("publicKey");
     
     // Validate the ID
-    if (!id) {
+    if (!publicKey) {
       return NextResponse.json({ message: 'Participant ID is required' }, { status: 400 });
     }
 
     const donations = await prisma.donation.findMany();
     const participant = await prisma.participant.findFirst({
-      where: { publicKey: id },
+      where: { publicKey: publicKey },
     });
 
     // Check if participant exists
