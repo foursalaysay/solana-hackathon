@@ -17,6 +17,7 @@ import { Separator } from '@/components/ui/separator'
 import HealthOfficerNavbar from '@/components/reusables/Navbar'
 import DonationListCard from '@/components/reusables/DonationListCard'
 import { Donation } from '@/lib/types/types'
+import { toast } from 'sonner'
 
 const HealthOfficer = () => {
 
@@ -27,7 +28,9 @@ const HealthOfficer = () => {
           try {
             const data = await fetch('/api/donation');
             const res = await data.json();
+            console.log(res.donations)
             setDonations(res.donations);
+            toast.error('THere is record!')
             return res;
           } catch (error) {
           console.log(error);

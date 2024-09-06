@@ -2,18 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../../helpers/server-helper";
 import prisma from "../../../../../prisma";
 
-
-export const GET = async (req: Request) => {
+export const GET = async (req: NextRequest) => {
   await ConnectToDatabase();
+
   try {
-    const url = new URL(req.url);
-    const publicKey = url.searchParams.get("publicKey");
-    
-    // Validate the ID
+    // Access query parameters from req.nextUrl
+    const publicKey = req.nextUrl.searchParams.get("publicKey");
+
+    // Validate the publicKey
     if (!publicKey) {
-      return NextResponse.json({ message: 'Participant ID is required' }, { status: 400 });
+      return NextResponse.json({ message: 'Public Key is required' }, { status: 400 });
     }
 
+    // Fetch donations and participant
     const donations = await prisma.donation.findMany();
     const participant = await prisma.participant.findFirst({
       where: { publicKey: publicKey },
@@ -33,7 +34,6 @@ export const GET = async (req: Request) => {
     await prisma.$disconnect();
   }
 };
-
 
 export const POST = async (req : Request) => {
   try {

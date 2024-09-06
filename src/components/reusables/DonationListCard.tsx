@@ -7,12 +7,9 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import ConfirmParticipation from './ConfirmParticipation';
 import { Donation, DonationListCardProps } from '@/lib/types/types';
-import { usePublicKey } from '../context/PublicKeyContext';
 
 
-
-
-const DonationListCard: React.FC<DonationListCardProps> = (donations : DonationListCardProps) => {
+const DonationListCard: React.FC<DonationListCardProps> = (donations) => {
   
   const pathname = usePathname();
   return(

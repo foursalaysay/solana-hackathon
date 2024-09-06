@@ -1,17 +1,17 @@
 'use client'
 
 import * as React from 'react'
-import { usePublicKey } from '@/components/context/PublicKeyContext'
 import DonationListCard from '@/components/reusables/DonationListCard';
 import { useEffect } from 'react';
 import { Donation } from '@/lib/types/types';
 import { toast } from 'sonner';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 
 export default function UserMainPage() {
 
     const [donations, setDonations] = React.useState<Donation[]>([]);
-    const publicKey= usePublicKey();
+    const publicKey= useWallet();
 
     if(!publicKey){
       toast.error("No Public KEy!")

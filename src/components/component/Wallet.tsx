@@ -20,7 +20,7 @@ type Props = {
 
 export const Wallet: FC<Props> = ({ children }) => {
   //input your RPC as your endpoint value
-  const endpoint = 'https://api.testnet.solana.com';
+  const endpoint = 'https://api.devnet.solana.com';
 
   const wallets = useMemo(
     () => [
@@ -33,7 +33,7 @@ export const Wallet: FC<Props> = ({ children }) => {
 
   return (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider wallets={wallets} autoConnect={true}>
+      <WalletProvider wallets={wallets}>
           <WalletModalProvider>
             {children}
           </WalletModalProvider>

@@ -11,6 +11,7 @@ const WalletMultiButtonDynamic = dynamic(() =>
     import('@solana/wallet-adapter-react-ui').then((mod) => mod.WalletMultiButton),
     { ssr: false }
 );
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 const ConnectWalletButton = () => {
   const [hasPublicKey, setHasPublicKey ] = useState(false);
@@ -66,9 +67,9 @@ const ConnectWalletButton = () => {
 
   return (
     <div className='w-72'>
-        <WalletMultiButtonDynamic className='w-full'>
+        <WalletMultiButton className='w-full'>
             {wallet.publicKey ? `${wallet.publicKey.toBase58().substring(0,8)}...` : "Connect Wallet"}
-        </WalletMultiButtonDynamic>
+        </WalletMultiButton>
     </div>
   )
 }
