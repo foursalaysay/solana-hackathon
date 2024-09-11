@@ -16,16 +16,16 @@ export const GET = async (req: NextRequest) => {
 
     // Fetch donations and participant
     const donations = await prisma.donation.findMany();
-    const participant = await prisma.participant.findFirst({
-      where: { publicKey: publicKey },
-    });
+    // const participant = await prisma.participant.findFirst({
+    //   where: { publicKey: publicKey },
+    // });
 
-    // Check if participant exists
-    if (!participant) {
-      return NextResponse.json({ message: 'Participant not found' }, { status: 404 });
-    }
+    // // Check if participant exists
+    // if (!participant) {
+    //   return NextResponse.json({ message: 'Participant not found' }, { status: 404 });
+    // }
 
-    return NextResponse.json({ donations, participant }, { status: 200 });
+    return NextResponse.json({ donations }, { status: 200 });
 
   } catch (error) {
     console.error('Error fetching donations:', error);
@@ -35,12 +35,12 @@ export const GET = async (req: NextRequest) => {
   }
 };
 
-export const POST = async (req : Request) => {
+export const POST = async (req: Request) => {
   try {
-
     const data = await req.json();
-    const { donationId, participantId, publicKey, name, address, age, contactEmail, contactNumber, sampleDiseases} = data;
+    const { donationId, participantId, publicKey, name, address, age, contactEmail, contactNumber, sampleDiseases } = data;
 
+    // Update the donation with a new participant
     const updatedDonation = await prisma.donation.update({
       where: {
         id: donationId, // The ID of the donation you want to update
@@ -49,27 +49,34 @@ export const POST = async (req : Request) => {
         participants: {
           create: [
             {
-              id : participantId,
+              id: participantId,
               publicKey: publicKey,
               name: name,
               address: address,
-              age : age,
-              contactEmail : contactEmail,
-              contactNumber : contactNumber,
-              sampleDisease : sampleDiseases
+              age: age,
+              contactEmail: contactEmail,
+              contactNumber: contactNumber,
+              sampleDisease: sampleDiseases
             },
           ],
         },
       },
     });
 
+    // Return the updated donation as JSON
     return NextResponse.json(updatedDonation, {
-      status : 200
-    })
+      status: 200,
+    });
   } catch (error) {
-    console.log(error)
+    // Log the error for debugging
+    console.error('Error updating donation:', error);
+
+    // Return an error response
+    return NextResponse.json({ error: 'Internal Server Error' }, {
+      status: 500,
+    });
   }
-}
+};
 
 
 
