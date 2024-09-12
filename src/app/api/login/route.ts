@@ -59,7 +59,7 @@ export const GET = async (req : Request) => {
         console.log(error)
     
         return NextResponse.json({
-            message : "Server Error"
+            message : "Server Error : GET METHOD"
         }, {status : 500})
     }
 }

@@ -34,3 +34,12 @@ model Participant {
   donationId    String?   @db.ObjectId
 }
 
+// model Shortlisted {
+//   id  String @id @default(auto()) @map("_id") @db.ObjectId
+//   address String
+//   bountyAmount String
+//   donationDate String
+//   totalParticipants String
+
+// }
+

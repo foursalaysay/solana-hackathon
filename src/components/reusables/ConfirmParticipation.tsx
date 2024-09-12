@@ -14,27 +14,36 @@ import { Separator } from '../ui/separator';
 import { toast } from 'sonner';
 import { Donation, Participant } from '@/lib/types/types';
 import { usePublicKey } from '../context/PublicKeyContext';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 export default function ConfirmParticipation({ donation }: { donation: Donation }) {
   const [participant, setParticipant] = useState<Participant | null>(null);
   const [isLoading, setIsLoading] = useState(false);  // Loading state
-  const publicKey = usePublicKey();
+  const { publicKey } = useWallet();
+  const publicKeyString = publicKey?.toBase58();
 
   const { donationId, participantId, name, address, age, contactEmail, contactNumber, sampleDiseases } = donation;
 
   const handleConfirmParticipation = async () => {
     setIsLoading(true);  // Start loading
-
+  
     try {
-      const response = await fetch(`/api/userdashboard/${publicKey}`, {
+      // // Ensure all necessary fields are defined
+      // if (!publicKeyString || !donationId || !name || !address || !age || !contactEmail || !contactNumber || !sampleDiseases) {
+      //   toast.error('Missing required information');
+      //   setIsLoading(false);
+      //   return;
+      // }
+  
+      const response = await fetch(`/api/userdashboard`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          publicKey: publicKeyString,  // Correct publicKey
           donationId,
           participantId,
-          publicKey,
           name,
           address,
           age,
@@ -43,9 +52,9 @@ export default function ConfirmParticipation({ donation }: { donation: Donation 
           sampleDiseases,
         }),
       });
-
+  
       const result = await response.json();
-
+  
       if (response.ok) {
         toast.success('You are listed for donation');
       } else {
@@ -58,7 +67,7 @@ export default function ConfirmParticipation({ donation }: { donation: Donation 
       setIsLoading(false);  // Reset loading state
     }
   };
-
+  
   return (
     <>
       <Dialog>
