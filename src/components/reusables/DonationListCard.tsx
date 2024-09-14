@@ -24,11 +24,16 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
   const { publicKey } = useWallet();
   const publicKeyString = publicKey?.toBase58();
   const [isLoading, setIsLoading] = useState(false);  
-  const [selectedDonationId, setSelectedDonationId] = useState("")
-  
+  const [selectedDonationId, setSelectedDonationId] = useState("");
+
   const handleConfirmParticipation = async () => {
     if (!publicKeyString) {
       toast.error('Wallet not connected');
+      return;
+    }
+
+    if (!selectedDonationId) {
+      toast.error('Donation ID is missing');
       return;
     }
 
@@ -36,13 +41,13 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
 
     const requestData = {
       publicKey: publicKeyString,
-      donationId : selectedDonationId
+      selectedDonationId, // Ensure this is set correctly
     };
 
     console.log('Sending Request Data:', requestData); // Log request data
 
     try {
-      const response = await fetch(`/api/userdashboard`, {
+      const response = await fetch(`/api/userdashboard/${publicKey}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -105,52 +110,54 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
                 <p className='text-xs'>Bounty Amount: {donation.bountyAmount}</p>
               </div>
               {pathname.includes("userdashboard") && (
-                 <Dialog>
-                 <DialogTrigger asChild>
-                   <Button
-                     variant="default"
-                     className='w-full bg-red-600 hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'
-                     disabled={isLoading}
-                     onClick={() => {
-                      setSelectedDonationId(donation.donationId)
-                     }}
-                   >
-                     {isLoading ? 'Processing...' : 'Participate'}
-                   </Button>
-                 </DialogTrigger>
-                 <DialogContent className="w-[320px] lg:w-96 rounded-md">
-                   <DialogHeader>
-                     <DialogTitle>Confirm Participation</DialogTitle>
-                     <DialogDescription>
-                       Are you sure you want to participate in donating blood?
-                     </DialogDescription>
-                   </DialogHeader>
-                   <Separator />
-                   <DialogFooter className="flex flex-col gap-2">
-                     <DialogClose asChild>
-                       <Button
-                         type="button"
-                         variant="secondary"
-                         className='w-full hover:bg-gray-200'
-                         disabled={isLoading}  // Disable during loading
-                       >
-                         Cancel
-                       </Button>
-                     </DialogClose>
-                     <DialogClose asChild>
-                       <Button
-                         type="button"
-                         className='w-full bg-redColor hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'
-                         onClick={handleConfirmParticipation}
-                         disabled={isLoading}  // Disable during loading
-                       >
-                         {isLoading ? 'Processing...' : 'Confirm'}
-                       </Button>
-                     </DialogClose>
-                   </DialogFooter>
-                 </DialogContent>
-               </Dialog>
-                )}
+                <Dialog
+                  onOpenChange={(isOpen) => {
+                    if (isOpen) {
+                      setSelectedDonationId(donation.donationId); // Set donation ID when dialog opens
+                    }
+                  }}
+                >
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="default"
+                      className='w-full bg-red-600 hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'
+                      disabled={isLoading}
+                      onClick={() => setSelectedDonationId(donation.donationId)} // Set donation ID on button click
+                    >
+                      {isLoading ? 'Processing...' : 'Participate'}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="w-[320px] lg:w-96 rounded-md">
+                    <DialogHeader>
+                      <DialogTitle>Confirm Participation</DialogTitle>
+                      <DialogDescription>
+                        Are you sure you want to participate in donating blood?
+                      </DialogDescription>
+                    </DialogHeader>
+                    <Separator />
+                    <DialogFooter className="flex flex-col gap-2">
+                      <DialogClose asChild>
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          className='w-full hover:bg-gray-200'
+                          disabled={isLoading}
+                        >
+                          Cancel
+                        </Button>
+                      </DialogClose>
+                      <Button
+                        type="button"
+                        className='w-full bg-redColor hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'
+                        onClick={handleConfirmParticipation}
+                        disabled={isLoading}
+                      >
+                        {isLoading ? 'Processing...' : 'Confirm'}
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              )}
             </div>
           ))
         ) : (
