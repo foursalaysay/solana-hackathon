@@ -5,44 +5,6 @@ import { ConnectionContext } from "@solana/wallet-adapter-react";
 
 
 
-export const POST = async (req : Request) => {
-  try {
-      const {publicKey, name, address, gender, age, contactEmail, contactNumber, sampleDisease } = await req.json();
-
-      if(!publicKey || !name || !address || !gender || !age || !contactEmail || !contactNumber || !sampleDisease ){
-          return NextResponse.json({
-              message : "Invalid Data"
-          }, {status : 422})
-      }
-
-    await ConnectToDatabase();
-
-    const participant = await prisma.participant.update({
-        where : {
-            publicKey : publicKey
-        },
-        data : {
-            name : name,
-            address : address,
-            gender : gender,
-            age : age,
-            contactEmail : contactEmail,
-            contactNumber : contactNumber,
-            sampleDisease : sampleDisease
-        }
-    });
-    return NextResponse.json({participant}, {status: 200})
-  } catch (error) {
-    console.log(error)
-
-    return NextResponse.json({
-        message : "Server Error"
-    }, {status : 500})
-}finally{
-    await prisma.$disconnect();
-}
-}
-
 // Handle GET request
 export async function GET(req: NextRequest) {
   await ConnectToDatabase();
@@ -86,3 +48,59 @@ export async function GET(req: NextRequest) {
 // };
 
 
+export const POST = async (req: Request) => {
+  try {
+    const data = await req.json();
+    console.log('Request Data:', data); // Debug incoming data
+
+    const { publicKey, donationId } = data;
+
+    // Validate required fields
+    if (!publicKey) {
+      console.log('Missing Public Key');
+      return NextResponse.json({
+        message: "Invalid Data: Missing publicKey",
+      }, { status: 422 });
+    }
+
+    if (!donationId) {
+      console.log('Missing Donation ID');
+      return NextResponse.json({
+        message: "Invalid Data: Missing donationId",
+      }, { status: 422 });
+    }
+
+    // Connect to the database
+    await ConnectToDatabase();
+
+    // Update the donation to add the participant
+    const donationSave = await prisma.donation.update({
+      where: { id: donationId },
+      data: {
+        participants: {
+          connect: { publicKey },
+        },
+      },
+    });
+
+    // Update the participant to include the donationId
+    const participantUpdate = await prisma.participant.update({
+      where: { publicKey },
+      data: {
+        donations: {
+          connect: { id: donationId },
+        },
+      },
+    });
+
+    return NextResponse.json({ donation: donationSave, participant: participantUpdate }, { status: 200 });
+
+  } catch (error) {
+    console.error('Error in POST handler:', error);
+    return NextResponse.json({
+      message: "Server Error"
+    }, { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+};

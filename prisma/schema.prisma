@@ -11,27 +11,28 @@ model BloodDonation {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 }
 
+model Participant {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  publicKey     String        @unique
+  name          String?
+  address       String?
+  gender        String?
+  age           String?
+  contactEmail  String?
+  contactNumber String?
+  sampleDisease String?
+  donations     Donation[]    @relation("ParticipantDonations", fields: [donationIds], references: [id])
+  donationIds   String[]      @db.ObjectId
+}
+
 model Donation {
   id                String        @id @default(auto()) @map("_id") @db.ObjectId
   address           String
   bountyAmount      String
   donationDate      DateTime      @db.Date
   totalParticipants String
-  participants      Participant[]
-}
-
-model Participant {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  address       String?
-  age           String?
-  contactEmail  String?
-  contactNumber String?
-  gender        String?
-  name          String?
-  publicKey     String?    @unique
-  sampleDisease String?
-  Donation      Donation? @relation(fields: [donationId], references: [id])
-  donationId    String?   @db.ObjectId
+  participants      Participant[] @relation("ParticipantDonations", fields: [participantIds], references: [id])
+  participantIds    String[]      @db.ObjectId
 }
 
 // model Shortlisted {
