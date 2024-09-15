@@ -18,6 +18,7 @@ import {
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { useWallet } from '@solana/wallet-adapter-react';
+import { CreateDonationList } from './CreateDonationList';
 
 export default function DonationListCard({ donations }: { donations: Donation[] }) {
   const pathname = usePathname();
@@ -71,7 +72,28 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
 
   return (
     <div className='p-5 flex flex-col gap-5'>
-      <h1 className='text-2xl lg:text-4xl font-bold'>Donation Listing</h1>
+      <div className='flex flex-col items-center lg:flex-row justify-between gap-5 lg:gap-0'>
+        <h1 className='text-2xl lg:text-4xl font-bold'>Donation Listing</h1>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className="lg:w-1/6 w-[320px] bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2 hover:bg-white">Create Donation Listing</Button>
+          </DialogTrigger>
+          <DialogContent className="w-[350px] rounded-md lg:w-full border-2 border-red-600">
+            <DialogHeader>
+              <DialogTitle>Blood Donation Listing</DialogTitle>
+            </DialogHeader>
+            <Separator />
+            {/* THIS COMPONENT IS FOR CREATING THE DONATION LISTING */}
+            <CreateDonationList />
+            <Separator />
+            <DialogDescription>
+              This will be an Official Blood Donation Listing.
+            </DialogDescription>
+          </DialogContent>
+        </Dialog>
+      </div>
+      <Separator />
+     
       <div className='flex flex-wrap gap-5'>
         {donations && donations.length > 0 ? (
           donations.map((donation, index) => (

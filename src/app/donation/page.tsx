@@ -32,7 +32,6 @@ const DonationPage = () => {
             const res = await data.json();
             console.log(res.donations)
             setDonations(res);
-            toast.error('There is record!')
             return res;
           } catch (error) {
           console.log(error);
@@ -42,7 +41,7 @@ const DonationPage = () => {
     },[])
 
   return (
-    <div className='flex flex-col items-stretch justify-center p-5'>
+    <div className='flex flex-col items-stretch justify-center'>
       <HealthOfficerNavbar />
       <Separator />
         <DonationListCard donations={donations || []} />

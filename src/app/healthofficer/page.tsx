@@ -25,13 +25,12 @@ const HealthOfficer = () => {
     useEffect(() => {
       const getDonations = async () => {
           try {
-            const data = await fetch('/api/donation', {
+            const data = await fetch('/api/healthofficer', {
               method : 'GET'
             });
             const res = await data.json();
             console.log(res.donations)
-            setDonations(res.donations);
-            toast.error('THere is record!')
+            setDonations(res);
             return res;
           } catch (error) {
           console.log(error);
@@ -41,27 +40,8 @@ const HealthOfficer = () => {
     },[])
 
   return (
-    <div className='flex flex-col items-stretch justify-center p-5'>
-      <HealthOfficerNavbar />
-      <Separator />
-        <DonationListCard donations={donations} />
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button className="w-full bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2 hover:bg-white">Create Donation Listing</Button>
-          </DialogTrigger>
-          <DialogContent className="w-[350px] rounded-md lg:w-full border-2 border-red-600">
-            <DialogHeader>
-              <DialogTitle>Blood Donation Listing</DialogTitle>
-            </DialogHeader>
-            <Separator />
-            {/* THIS COMPONENT IS FOR CREATING THE DONATION LISTING */}
-            <CreateDonationList />
-            <Separator />
-            <DialogDescription>
-              This will be an Official Blood Donation Listing.
-            </DialogDescription>
-          </DialogContent>
-    </Dialog>
+    <div>
+        <DonationListCard donations={donations || []} />
     </div>
   )
 }
