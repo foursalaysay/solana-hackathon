@@ -20,7 +20,8 @@ export const POST = async (req : Request) => {
                 address : address,
                 donationDate : donationDate,
                 totalParticipants : totalParticipants,
-                bountyAmount : bountyAmount
+                bountyAmount : bountyAmount,
+                status : "Upcoming"
             }
         });
         return NextResponse.json({donation}, {status: 200})

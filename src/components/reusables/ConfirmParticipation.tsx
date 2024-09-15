@@ -25,6 +25,8 @@ const ConfirmParticipation: React.FC<ConfirmParticipationProps> = ({ donationId,
   const publicKeyString = publicKey?.toBase58();
 
   const handleConfirmParticipation = async () => {
+
+    
     if (!publicKeyString) {
       toast.error('Wallet not connected');
       return;

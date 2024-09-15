@@ -27,13 +27,10 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
   const [selectedDonationId, setSelectedDonationId] = useState("");
 
   const handleConfirmParticipation = async () => {
+
+    
     if (!publicKeyString) {
       toast.error('Wallet not connected');
-      return;
-    }
-
-    if (!selectedDonationId) {
-      toast.error('Donation ID is missing');
       return;
     }
 
@@ -41,13 +38,13 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
 
     const requestData = {
       publicKey: publicKeyString,
-      selectedDonationId, // Ensure this is set correctly
+      donationId: "66c817f38e55a5461df47bd5", 
     };
 
     console.log('Sending Request Data:', requestData); // Log request data
 
     try {
-      const response = await fetch(`/api/userdashboard/${publicKey}`, {
+      const response = await fetch(`/api/userdashboard/${publicKeyString}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -77,8 +74,8 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
       <h1 className='text-2xl lg:text-4xl font-bold'>Donation Listing</h1>
       <div className='flex flex-wrap gap-5'>
         {donations.length > 0 ? (
-          donations.map((donation) => (
-            <div key={donation.donationId} className='flex flex-col w-[320px] lg:w-[350px] border-2 border-black p-4 rounded-md'>
+          donations.map((donation, index) => (
+            <div key={index} className='flex flex-col w-[320px] lg:w-[350px] border-2 border-black p-4 rounded-md'>
               <Image
                 className='self-center m-2 rounded-md'
                 src='/hospital.jpg'
@@ -111,18 +108,13 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
               </div>
               {pathname.includes("userdashboard") && (
                 <Dialog
-                  onOpenChange={(isOpen) => {
-                    if (isOpen) {
-                      setSelectedDonationId(donation.donationId); // Set donation ID when dialog opens
-                    }
-                  }}
                 >
                   <DialogTrigger asChild>
                     <Button
                       variant="default"
                       className='w-full bg-red-600 hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'
                       disabled={isLoading}
-                      onClick={() => setSelectedDonationId(donation.donationId)} // Set donation ID on button click
+                      onClick={() => setSelectedDonationId(donation.donationId)}
                     >
                       {isLoading ? 'Processing...' : 'Participate'}
                     </Button>
@@ -149,7 +141,7 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
                       <Button
                         type="button"
                         className='w-full bg-redColor hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'
-                        onClick={handleConfirmParticipation}
+                        onClick={() => handleConfirmParticipation()} 
                         disabled={isLoading}
                       >
                         {isLoading ? 'Processing...' : 'Confirm'}

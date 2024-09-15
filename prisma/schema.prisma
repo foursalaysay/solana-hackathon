@@ -31,6 +31,7 @@ model Donation {
   bountyAmount      String
   donationDate      DateTime      @db.Date
   totalParticipants String
+  status            String?
   participants      Participant[] @relation("ParticipantDonations", fields: [participantIds], references: [id])
   participantIds    String[]      @db.ObjectId
 }
