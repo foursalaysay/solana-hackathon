@@ -12,7 +12,6 @@ import { Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePublicKey } from '../context/PublicKeyContext'
 
-  
 const UserDropdown = () => {
 
   const publicKey = usePublicKey();

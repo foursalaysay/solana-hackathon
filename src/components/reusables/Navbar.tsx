@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <div className='flex flex-row items-center justify-between w-full p-5'>
         <h5 className='text-lg font-bold'><span className='text-red-600'>Red</span>Bit</h5>
-        {pathname.includes('healthofficer') ? (<HealthOfficerDropdown />) : (<UserDropdown />)}
+        {pathname.includes('userdashboard') ? (<UserDropdown />) : (<HealthOfficerDropdown />)}
     </div>
   )
 }

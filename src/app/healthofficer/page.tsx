@@ -1,6 +1,5 @@
 'use client'
 
-import HealthOfficerDropdown from '@/components/reusables/HealthOfficerDropdown'
 import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import {
@@ -26,7 +25,9 @@ const HealthOfficer = () => {
     useEffect(() => {
       const getDonations = async () => {
           try {
-            const data = await fetch('/api/donation');
+            const data = await fetch('/api/donation', {
+              method : 'GET'
+            });
             const res = await data.json();
             console.log(res.donations)
             setDonations(res.donations);

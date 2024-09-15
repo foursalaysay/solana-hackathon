@@ -73,7 +73,7 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
     <div className='p-5 flex flex-col gap-5'>
       <h1 className='text-2xl lg:text-4xl font-bold'>Donation Listing</h1>
       <div className='flex flex-wrap gap-5'>
-        {donations.length > 0 ? (
+        {donations && donations.length > 0 ? (
           donations.map((donation, index) => (
             <div key={index} className='flex flex-col w-[320px] lg:w-[350px] border-2 border-black p-4 rounded-md'>
               <Image
