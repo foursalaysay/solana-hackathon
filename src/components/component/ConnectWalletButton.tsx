@@ -26,7 +26,7 @@ const ConnectWalletButton = () => {
     
       try {
 
-        const checkPK = await fetch(`/api/login?publicKey=${PBkey}`, {
+        const checkPK = await fetch(`/api/login?=${PBkey}`, {
           method : 'GET',
           headers: {
             'Content-Type': 'application/json',

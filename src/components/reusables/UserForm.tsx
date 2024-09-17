@@ -36,7 +36,8 @@ import { useEffect, useState } from "react"
 import { toast } from 'sonner'
 
 const FormSchema = z.object({
-  publicKey : z.string(),
+    id : z.string(),
+    publicKey : z.string(),
     name : z.string().min(5, {
         message : "Name is required"
     }),
@@ -60,9 +61,34 @@ const FormSchema = z.object({
 })
 
 export function UserForm() {
+
+  const [selectId, setSelectId] = useState("")
+
+  useEffect(() => {
+    async function getUserId(){
+      try {
+        const res = await fetch('/api/userdashboard', {
+          method : 'GET',
+          headers : {
+              'Content-Type' : 'application/json'
+          }
+        });
+
+        const data = await res.json()
+        const { userId } = data?.id;
+        setSelectId(userId);
+      } catch (error) {
+        toast.error('Id not Fetched!')
+      }
+        
+    }
+   getUserId()
+  },[])
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+    id: selectId,
     publicKey: "",
     name : "",
     address : "",
@@ -70,8 +96,7 @@ export function UserForm() {
     age : "",
     contactEmail : "",
     contactNumber : "",
-    sampleDisease : "",
-    diseaseHistory : []
+    sampleDisease : ""
     },
 })
 
