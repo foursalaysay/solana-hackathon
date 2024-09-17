@@ -113,7 +113,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({...data, publicKey}),
+      body: JSON.stringify(data),
     });
 
 

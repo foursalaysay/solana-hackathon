@@ -13,58 +13,60 @@ const WalletMultiButtonDynamic = dynamic(() =>
 );
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
+
 const ConnectWalletButton = () => {
   const [hasPublicKey, setHasPublicKey ] = useState(false);
   const router = useRouter();
   const wallet  = useWallet();
 
-
   useEffect(() => {
+    const getPBKey = wallet.publicKey;
+  
     async function saveUser() {
-      const PBkey = wallet.publicKey;
-
-    
       try {
-
-        const checkPK = await fetch(`/api/login?=${PBkey}`, {
-          method : 'GET',
+        // Check if the public key already exists
+        const checkPB = await fetch(`/api/login?publicKey=${encodeURIComponent(getPBKey)}`, {
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         });
-
-        if(checkPK.ok){
-          router.push(`/userdashboard/${PBkey}`)
-        }else{
-          const response = await fetch('/api/login', { 
+  
+        if (checkPB.ok) {
+          // Redirect to user dashboard if the public key exists
+          router.push(`/userdashboard/${getPBKey}`);
+        } else if (checkPB.status === 404) {
+          // Public key does not exist, so create a new participant
+          const savePB = await fetch('/api/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ publicKey: PBkey }), 
+            body: JSON.stringify({ publicKey: getPBKey }),
           });
-
-          if (response.ok) {
-            await response.json(); // Handle or ignore the result if needed
-            router.push('/userdashboard');
-            toast.success('Participant added successfully');
+  
+          if (savePB.ok) {
+            // Redirect to user dashboard after successful creation
+            router.push(`/userdashboard/${getPBKey}`);
           } else {
-            const result = await response.json(); // Parse the error response
-            toast.error(result.message || 'No Wallet Connected');
+            const result = await savePB.json(); // Read the body of the POST request response
+            toast.error(result.message || 'Failed to create participant.');
           }
+        } else {
+          const result = await checkPB.json(); // Read the body of the GET request response
+          toast.error(result.message || 'Failed to check participant.');
         }
       } catch (error) {
         console.error('Error:', error);
         toast.error('Server Error');
       }
     }
-
-    if (wallet.publicKey) { // Ensure you only run this when wallet.publicKey is defined
+  
+    if (getPBKey) {
       saveUser();
     }
-  }, [wallet.publicKey, router]); 
-
-
+  }, [wallet.publicKey, router]);
+  
   return (
     <div className='w-72'>
         <WalletMultiButton className='w-full'>

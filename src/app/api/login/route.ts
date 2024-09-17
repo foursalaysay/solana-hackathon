@@ -4,33 +4,46 @@ import { NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../helpers/server-helper";
 import prisma from "../../../../prisma";
 
-export const POST = async (req : Request) => {
+
+export const POST = async (req: Request) => {
+    await ConnectToDatabase();
+  
     try {
-        const { publicKey } = await req.json();
+      const { publicKey } = await req.json(); // Ensure that the request contains valid JSON
   
-        if(!publicKey){
-            return NextResponse.json({
-                message : "Invalid Data"
-            }, {status : 422})
-        }
-      await ConnectToDatabase();
-  
-      const participant = await prisma.participant.create({
-        data : {
-            publicKey : publicKey
-        }
+      // Check if a participant with the same publicKey exists
+      const existingParticipant = await prisma.participant.findUnique({
+        where: { publicKey },
       });
-      return NextResponse.json({participant}, {status: 200})
-    } catch (error) {
-      console.log(error)
   
-      return NextResponse.json({
-          message : "Server Error"
-      }, {status : 500})
-  }finally{
+      if (existingParticipant) {
+        // If a participant exists, return a 409 Conflict status
+        return NextResponse.json(
+          { message: 'Participant with this publicKey already exists.' },
+          { status: 409 }
+        );
+      }
+  
+      // Create a new participant if no existing one is found
+      const participant = await prisma.participant.create({
+        data: {
+          publicKey,
+        },
+      });
+  
+      return NextResponse.json(
+        { message: 'Participant added successfully', participant },
+        { status: 201 }
+      );
+    } catch (error) {
+      console.error('Error saving participant:', error);
+  
+      // Return an error message with a 500 status
+      return NextResponse.json({ message: 'Server Error' }, { status: 500 });
+    } finally {
       await prisma.$disconnect();
-}
-}
+    }
+  };
 
   
 export const GET = async (req : Request) => {

@@ -32,112 +32,23 @@ export async function GET(req: NextRequest) {
   }
 }
 
-
-
-// export const GET = async (request: NextRequest) => {
-  
-//   try {
-
-//     await ConnectToDatabase();
-//         const participant = await prisma.participant.findFirst({
-//             where : {
-//                 publicKey : id
-//             }
-//         })
-//     return NextResponse.json({ participant }, { status: 200 });
-//   } catch (error) {
-//     console.error('Error fetching donations:', error);
-//     return NextResponse.json({ message: 'Server Error' }, { status: 500 });
-//   } finally {
-//     await prisma.$disconnect();
-//   }
-// };
-
-// export const POST = async (req: Request) => {
-//   try {
-//     const data = await req.json();
-//     console.log('Request Data:', data); // Debug incoming data
-
-//     const { publicKey, donationId } = data;
-
-//     // Connect to the database
-//     await ConnectToDatabase();
-
-//     // Ensure the donationId and publicKey are not undefined
-//     if (!donationId || !publicKey) {
-//       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
-//     }
-
-//     // Update the donation to add the participant
-//     let donationSave;
-//     try {
-//       donationSave = await prisma.donation.update({
-//         where: { id: donationId }, // Ensure id matches your schema
-//         data: {
-//           participants: {
-//             connect: { publicKey : publicKey }, // Ensure this relationship exists
-//           },
-//         },
-//       });
-//     } catch (error) {
-//       console.error('Error updating donation:', error);
-//       return NextResponse.json({ message: "Error updating donation" }, { status: 500 });
-//     }
-
-//     // Update the participant to include the donationId
-//     let participantUpdate;
-//     try {
-//       participantUpdate = await prisma.participant.update({
-//         where: { publicKey }, // Ensure publicKey exists in the participant schema
-//         data: {
-//           donations: {
-//             connect: { id: donationId }, // Ensure this relationship exists
-//           },
-//         },
-//       });
-//     } catch (error) {
-//       console.error('Error updating participant:', error);
-//       return NextResponse.json({ message: "Error updating participant" }, { status: 500 });
-//     }
-
-//     return NextResponse.json({ donation: donationSave, participant: participantUpdate }, { status: 200 });
-
-//   } catch (error) {
-//     console.error('Error in POST handler:', error);
-//     return NextResponse.json({
-//       message: "Server Error"
-//     }, { status: 500 });
-//   } finally {
-//     await prisma.$disconnect();
-//   }
-// };
-
-
 export const POST = async (req: Request) => {
   try {
     const data = await req.json();
-    const { donationId, participantId, publicKey, name, address, age, contactEmail, contactNumber, sampleDisease } = data;
+    const {id, publicKey, name, gender, address, age, contactEmail, contactNumber, sampleDisease } = data;
 
     // Update the donation with a new participant
-    const updatedDonation = await prisma.donation.update({
-      where: {
-        id: donationId, // The ID of the donation you want to update
-      },
+    const updatedDonation = await prisma.participant.update({
+      where: { id }, // Assuming the `id` exists in the database
       data: {
-        participants: {
-          create: [
-            {
-              id: participantId,
-              publicKey: publicKey,
-              name: name,
-              address: address,
-              age: age,
-              contactEmail: contactEmail,
-              contactNumber: contactNumber,
-              sampleDisease: sampleDisease
-            },
-          ],
-        },
+        publicKey : publicKey,
+        name,
+        address,
+        gender,
+        age, // Ensure age is stored as a number
+        contactEmail,
+        contactNumber,
+        sampleDisease,
       },
     });
 
