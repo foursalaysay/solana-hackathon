@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
 
 export const POST = async (req: NextRequest) => {
 
-  
+  await ConnectToDatabase();
   try {
 
     const publicKey = req.nextUrl.searchParams.get('publicKey');

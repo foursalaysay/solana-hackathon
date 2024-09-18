@@ -25,6 +25,15 @@ model Participant {
   donationIds   String[]      @db.ObjectId
 }
 
+model HealthOfficer {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  publicKey     String        @unique
+  name          String?
+  address       String?
+  contactEmail  String?
+  contactNumber String?
+}
+
 model Donation {
   id                String        @id @default(auto()) @map("_id") @db.ObjectId
   address           String
