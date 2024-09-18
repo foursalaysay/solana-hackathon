@@ -18,7 +18,8 @@ import {
 import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { CreateDonationList } from './CreateDonationList';
+import CreateDonationList from './CreateDonationList';
+
 
 export default function DonationListCard({ donations }: { donations: Donation[] }) {
   const pathname = usePathname();
@@ -70,11 +71,19 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
     }
   };
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  // Function to open the dialog
+  const openDialog = () => setIsDialogOpen(true);
+
+  // Function to close the dialog
+  const closeDialog = () => setIsDialogOpen(false);
+
   return (
     <div className='p-5 flex flex-col gap-5'>
       <div className='flex flex-col items-center lg:flex-row justify-between gap-5 lg:gap-0'>
         <h1 className='text-2xl lg:text-4xl font-bold'>Donation Listing</h1>
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild className={pathname.includes('userdashboard') ? 'hidden' : 'visible'}>
             <Button className="lg:w-1/6 w-[320px] bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2 hover:bg-white">Create Donation Listing</Button>
           </DialogTrigger>
@@ -84,7 +93,7 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
             </DialogHeader>
             <Separator />
             {/* THIS COMPONENT IS FOR CREATING THE DONATION LISTING */}
-            <CreateDonationList />
+            <CreateDonationList onSuccess={closeDialog}/>
             <Separator />
             <DialogDescription>
               This will be an Official Blood Donation Listing.

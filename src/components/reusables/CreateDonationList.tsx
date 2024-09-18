@@ -27,11 +27,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { CalendarIcon } from "lucide-react"
 import { format } from "date-fns"
-
-
-import { useEffect } from 'react'
-
-// import { saveDonation } from "../../../server/actions/SavetoDatabase"
+import { useRouter } from "next/navigation"
 
 
 const DonationSchema = z.object({
@@ -45,7 +41,10 @@ const DonationSchema = z.object({
   bountyAmount : z.string()
 })
 
-export function CreateDonationList() {
+interface closeDialogProps{
+  onSuccess : () => void;
+}
+const CreateDonationList: React.FC<closeDialogProps> = ({ onSuccess }) => {
   const form = useForm<z.infer<typeof DonationSchema>>({
     resolver: zodResolver(DonationSchema),
     defaultValues: {
@@ -55,6 +54,8 @@ export function CreateDonationList() {
       bountyAmount : ""
     },
   })
+  
+  const router = useRouter()
 
 async function onSubmit(data: z.infer<typeof DonationSchema>) {
 
@@ -70,6 +71,8 @@ async function onSubmit(data: z.infer<typeof DonationSchema>) {
     if(response.ok){
       const result = await response.json();
       console.log(result);
+      onSuccess();
+      
 
       toast({
         title: "Submission Successful",
@@ -178,3 +181,6 @@ async function onSubmit(data: z.infer<typeof DonationSchema>) {
     </Form>
   )
 }
+
+
+export default CreateDonationList;

@@ -1,22 +1,9 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { CreateDonationList } from '@/components/reusables/CreateDonationList'
-import { Separator } from '@/components/ui/separator'
-import HealthOfficerNavbar from '@/components/reusables/Navbar'
 import DonationListCard from '@/components/reusables/DonationListCard'
 import { Donation } from '@/lib/types/types'
-import { toast } from 'sonner'
+
 
 const HealthOfficer = () => {
 
@@ -36,7 +23,11 @@ const HealthOfficer = () => {
           console.log(error);
           }
         }
-      getDonations();
+      // Poll every 30 seconds
+  const interval = setInterval(getDonations, 5000);
+
+  // Cleanup interval on component unmount
+  return () => clearInterval(interval);
     },[])
 
   return (

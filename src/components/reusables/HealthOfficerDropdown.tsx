@@ -23,7 +23,7 @@ const HealthOfficerDropdown = () => {
             <DropdownMenuLabel>Health Officer</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem><Link href='healthofficer/donation'>Donations</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href='healthofficer/donation'>History</Link></DropdownMenuItem>
+            {/* <DropdownMenuItem><Link href='healthofficer/donation'>History</Link></DropdownMenuItem> */}
             <DropdownMenuItem><Link href='/'>Logout</Link></DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
