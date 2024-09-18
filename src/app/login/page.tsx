@@ -24,7 +24,7 @@ import Image from "next/image"
 import ConnectWalletButton from "@/components/component/ConnectWalletButton"
 import { Button } from "@/components/ui/button"
 
-export default function LoginPage() {
+export default function LoginPage({isOfficer} : {isOfficer : false}) {
 
 
 const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
@@ -51,38 +51,8 @@ useEffect(() => {
           <p className="text-muted-foreground">Donate blood and gain bounties.</p>
           <div className="flex flex-col gap-5 justify-center items-center">
             {/* this is for connecting wallet */}
-            <ConnectWalletButton />
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="outline" className="w-56">Health Officer</Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Input Health Officer Code</DialogTitle>
-                  <DialogDescription>
-                    Only authorize person can access this.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="flex items-center space-x-2">
-                  <div className="grid flex-1 gap-2">
-                    <Label htmlFor="link" className="sr-only">
-                      Link
-                    </Label>
-                    <Input
-                      value={healthCode}
-                      onChange={(e) => setHealthCode(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <DialogFooter className="sm:justify-start">
-                  <DialogClose asChild>
-                    <Button type="submit" variant="secondary" className="w-full bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2">
-                      Proceed
-                    </Button>
-                  </DialogClose>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
+            <ConnectWalletButton healthCode={healthCode}/>
+           
           </div>
         </div>
       </main>

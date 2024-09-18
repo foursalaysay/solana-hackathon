@@ -14,64 +14,67 @@ const WalletMultiButtonDynamic = dynamic(() =>
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 
-const ConnectWalletButton = () => {
+const ConnectWalletButton = ({ healthCode } : {healthCode : string}) => {
   const [hasPublicKey, setHasPublicKey ] = useState(false);
   const router = useRouter();
   const wallet  = useWallet();
 
+  const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
+
   useEffect(() => {
     const getPBKey = wallet.publicKey;
-  
-    async function saveUser() {
-      try {
-        // Check if the public key already exists
-        const checkPB = await fetch(`/api/login?publicKey=${getPBKey}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-  
-        if (checkPB.ok) {
 
-          // REDIRECT TO COMPLETE PROFILE FORM
-
-          const data = await checkPB.json();
-          const { name } = data;
-          if(!name){
-            router.push('/userdashboard')
-          }else{
-            router.push(`/userdashboard/${getPBKey}`)
-          }
-          
-        } else{
-          // Public key does not exist, so create a new participant
-          const savePB = await fetch('/api/login', {
-            method: 'POST',
+      async function saveUser() {
+        try {
+          // Check if the public key already exists
+          const checkPB = await fetch(`/api/login?publicKey=${getPBKey}`, {
+            method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ publicKey: getPBKey }),
           });
+    
+          if (checkPB.ok) {
   
-          if (savePB.ok) {
-            // Redirect to user dashboard after successful creation
-            router.push(`/userdashboard/${getPBKey}`);
-          } else {
-            const result = await savePB.json(); // Read the body of the POST request response
-            toast.error(result.message || 'Failed to create participant.');
+            // REDIRECT TO COMPLETE PROFILE FORM
+  
+            const data = await checkPB.json();
+            const { name } = data;
+            if(!name){
+              router.push('/userdashboard')
+            }else{
+              router.push(`/userdashboard/${getPBKey}`)
+            }
+            
+          } else{
+            // Public key does not exist, so create a new participant
+            const savePB = await fetch('/api/login', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ publicKey: getPBKey }),
+            });
+    
+            if (savePB.ok) {
+              // Redirect to user dashboard after successful creation
+              router.push(`/userdashboard/${getPBKey}`);
+            } else {
+              const result = await savePB.json(); // Read the body of the POST request response
+              toast.error(result.message || 'Failed to create participant.');
+            }
           }
+        } catch (error) {
+          console.error('Error:', error);
+          toast.error('Server Error');
         }
-      } catch (error) {
-        console.error('Error:', error);
-        toast.error('Server Error');
       }
-    }
-  
-    if (getPBKey) {
-      saveUser();
-    }
-  }, [wallet.publicKey, router]);
+    
+      if(getPBKey){
+        saveUser()
+      }
+      
+  }, [wallet.publicKey,  router, healthCode, getHealthCode]);
   
   return (
     <div className='w-72'>
