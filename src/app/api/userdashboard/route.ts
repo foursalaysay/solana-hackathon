@@ -13,6 +13,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: 'Public Key is required' }, { status: 400 });
     }
 
+    const donations = await prisma.donation.findMany();
+
     const getId = await prisma.participant.findUnique({
       where: {
         publicKey: publicKey, // Replace 'someIdVariable' with your actual ID variable or value
@@ -22,8 +24,8 @@ export async function GET(req: NextRequest) {
       },
     });
 
-    const donations = await prisma.donation.findMany();
-    return NextResponse.json({ donations, getId}, { status: 200 });
+   
+    return NextResponse.json({ donations, id : getId}, { status: 200 });
   } catch (error) {
     console.error('Error fetching donations:', error);
     return NextResponse.json({ message: 'Server Error' }, { status: 500 });
@@ -32,16 +34,23 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
+
+  
   try {
+
+    const publicKey = req.nextUrl.searchParams.get('publicKey');
+    
+    if (!publicKey) {
+      return NextResponse.json({ message: 'Public Key is required' }, { status: 400 });
+    }
     const data = await req.json();
-    const {id, publicKey, name, gender, address, age, contactEmail, contactNumber, sampleDisease } = data;
+    const { name, gender, address, age, contactEmail, contactNumber, sampleDisease } = data;
 
     // Update the donation with a new participant
     const updatedDonation = await prisma.participant.update({
-      where: { id }, // Assuming the `id` exists in the database
+      where: { publicKey }, // Assuming the `id` exists in the database
       data: {
-        publicKey : publicKey,
         name,
         address,
         gender,

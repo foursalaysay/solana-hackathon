@@ -19,7 +19,7 @@ export default function UserMainPage() {
         toast.error("No Public Key available!");
         return;
       }
-
+      
       try {
         // Fetch donations with the public key query parameter
         const response = await  fetch(`/api/userdashboard?publicKey=${publicKeyString}`, {

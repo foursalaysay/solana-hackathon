@@ -31,9 +31,9 @@ import { skills } from "./data"
 import { MeMultiSelect } from "./MeMultiSelect"
 
 import { useRouter } from "next/navigation"
-import { usePublicKey } from "../context/PublicKeyContext"
 import { useEffect, useState } from "react"
 import { toast } from 'sonner'
+import { useWallet } from "@solana/wallet-adapter-react"
 
 const FormSchema = z.object({
     id : z.string(),
@@ -60,22 +60,28 @@ const FormSchema = z.object({
       .optional(),
 })
 
+
+
 export function UserForm() {
 
   const [selectId, setSelectId] = useState("")
-
+  const { publicKey } = useWallet();
+  const router = useRouter();
+  
+  
+  console.log(publicKey)
   useEffect(() => {
     async function getUserId(){
       try {
-        const res = await fetch('/api/userdashboard', {
-          method : 'GET',
-          headers : {
-              'Content-Type' : 'application/json'
+        const res = await fetch(`/api/userdashboard?publicKey=${publicKey}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
           }
         });
 
         const data = await res.json()
-        const { userId } = data?.id;
+        const userId  = data?.id;
         setSelectId(userId);
       } catch (error) {
         toast.error('Id not Fetched!')
@@ -83,13 +89,12 @@ export function UserForm() {
         
     }
    getUserId()
-  },[])
+  },[publicKey])
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
     id: selectId,
-    publicKey: "",
     name : "",
     address : "",
     gender : "",
@@ -100,15 +105,12 @@ export function UserForm() {
     },
 })
 
-const router = useRouter()
-const publicKey = usePublicKey();
+
 
 async function onSubmit(data: z.infer<typeof FormSchema>) {
 
-  console.log(publicKey);
-
   try {
-    const response = await fetch('/api/userdashboard', {
+    const response = await fetch(`/api/userdashboard?publicKey=${publicKey}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -119,11 +121,10 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
 
     if(response.ok){
       const result = await response.json();
-      console.log(result);
-      console.log(publicKey)
      toast.success("Completed Profile!", {
       position : 'top-center'
      })
+     router.push(`/userdashboard/${publicKey}`)
     }
   } catch (error) {
     console.error("Error saving donation:", error);

@@ -19,6 +19,7 @@ import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { useWallet } from '@solana/wallet-adapter-react';
 import CreateDonationList from './CreateDonationList';
+import { useEffect } from 'react';
 
 
 export default function DonationListCard({ donations }: { donations: Donation[] }) {
@@ -30,7 +31,6 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
 
   const handleConfirmParticipation = async () => {
 
-    
     if (!publicKeyString) {
       toast.error('Wallet not connected');
       return;
@@ -40,7 +40,7 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
 
     const requestData = {
       publicKey: publicKeyString,
-      donationId: "66c817f38e55a5461df47bd5", 
+      donationId: selectedDonationId, 
     };
 
     console.log('Sending Request Data:', requestData); // Log request data

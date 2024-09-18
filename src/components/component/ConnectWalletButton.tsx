@@ -40,6 +40,8 @@ const ConnectWalletButton = () => {
           const { name } = data;
           if(!name){
             router.push('/userdashboard')
+          }else{
+            router.push(`/userdashboard/${getPBKey}`)
           }
           
         } else{
