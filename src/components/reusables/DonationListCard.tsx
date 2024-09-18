@@ -75,7 +75,7 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
       <div className='flex flex-col items-center lg:flex-row justify-between gap-5 lg:gap-0'>
         <h1 className='text-2xl lg:text-4xl font-bold'>Donation Listing</h1>
         <Dialog>
-          <DialogTrigger asChild>
+          <DialogTrigger asChild className={pathname.includes('userdashboard') ? 'hidden' : 'visible'}>
             <Button className="lg:w-1/6 w-[320px] bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2 hover:bg-white">Create Donation Listing</Button>
           </DialogTrigger>
           <DialogContent className="w-[350px] rounded-md lg:w-full border-2 border-red-600">

@@ -25,7 +25,7 @@ const ConnectWalletButton = () => {
     async function saveUser() {
       try {
         // Check if the public key already exists
-        const checkPB = await fetch(`/api/login?publicKey=${encodeURIComponent(getPBKey)}`, {
+        const checkPB = await fetch(`/api/login?publicKey=${getPBKey}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -33,9 +33,16 @@ const ConnectWalletButton = () => {
         });
   
         if (checkPB.ok) {
-          // Redirect to user dashboard if the public key exists
-          router.push(`/userdashboard/${getPBKey}`);
-        } else if (checkPB.status === 404) {
+
+          // REDIRECT TO COMPLETE PROFILE FORM
+
+          const data = await checkPB.json();
+          const { name } = data;
+          if(!name){
+            router.push('/userdashboard')
+          }
+          
+        } else{
           // Public key does not exist, so create a new participant
           const savePB = await fetch('/api/login', {
             method: 'POST',
@@ -52,9 +59,6 @@ const ConnectWalletButton = () => {
             const result = await savePB.json(); // Read the body of the POST request response
             toast.error(result.message || 'Failed to create participant.');
           }
-        } else {
-          const result = await checkPB.json(); // Read the body of the GET request response
-          toast.error(result.message || 'Failed to check participant.');
         }
       } catch (error) {
         console.error('Error:', error);
