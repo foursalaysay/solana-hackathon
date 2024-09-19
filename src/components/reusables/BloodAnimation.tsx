@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { toast } from 'sonner'
 
 export default function BloodAnimation() {
     const [healthCode, setHealthCode] = useState('')
@@ -37,6 +38,7 @@ export default function BloodAnimation() {
     
         const result = await res.json();
         if(res.ok){
+          toast.success('Officer Saved!')
           router.push('/login')
         }
         console.log(result); // Handle the API response here
@@ -59,6 +61,7 @@ export default function BloodAnimation() {
     
         const result = await res.json();
         if(res.ok){
+          toast.success('Participant Saved!')
           router.push('/login')
         }
         console.log(result); // Handle the API response here
@@ -67,8 +70,12 @@ export default function BloodAnimation() {
       }
     };
 
-    if(healthCode === getHealthCode){
-      saveOfficer()
+    const handleOfficerSubmission = () => {
+      if(healthCode === getHealthCode) {
+        saveOfficer();
+      } else {
+        toast.error('Invalid Health Officer Code');
+      }
     }
    
   return (
@@ -116,7 +123,9 @@ export default function BloodAnimation() {
                 </div>
                 <DialogFooter className="sm:justify-start">
                   <DialogClose asChild>
-                    <Button type="submit" variant="secondary" className="w-full bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2">
+                    <Button
+                      onClick={handleOfficerSubmission}
+                      type="submit" variant="secondary" className="w-full bg-red-600 text-white hover:text-red-600 hover:border-red-600 border-2">
                       Proceed
                     </Button>
                   </DialogClose>
