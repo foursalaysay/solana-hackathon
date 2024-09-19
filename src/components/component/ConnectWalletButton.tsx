@@ -1,8 +1,8 @@
-'use client'
+
 
 import React, { useEffect } from 'react'
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
@@ -13,7 +13,7 @@ const ConnectWalletButton = () => {
   const router = useRouter();
   const { publicKey }  = useWallet();
   const [hasName, setHasName ] = useState(false)
-  const [id, setId] = useState('')
+  const { id } = router.query;
 
   const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
 
@@ -30,8 +30,7 @@ const ConnectWalletButton = () => {
 
           if (checkPB.ok) {
             const data = await checkPB.json();
-            const { name, id } = data;
-            setId(id);
+            const { name } = data;
 
             if(name){
               setHasName(true)

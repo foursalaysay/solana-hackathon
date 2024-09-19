@@ -26,7 +26,7 @@ export default function BloodAnimation() {
 
     const saveOfficer = async () => {
       try {
-        const res = await fetch('/api', {
+        const res = await fetch('/api/officer', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -38,8 +38,9 @@ export default function BloodAnimation() {
     
         const result = await res.json();
         if(res.ok){
+          const id = result.id;
           toast.success('Officer Saved!')
-          router.push('/login')
+          router.push(`/login?id=${id}`)
         }
         console.log(result); // Handle the API response here
       } catch (error) {
@@ -49,7 +50,7 @@ export default function BloodAnimation() {
 
     const saveUser = async () => {
       try {
-        const res = await fetch('/api', {
+        const res = await fetch('/api/participant ', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -61,8 +62,9 @@ export default function BloodAnimation() {
     
         const result = await res.json();
         if(res.ok){
+          const id = result.id;
           toast.success('Participant Saved!')
-          router.push('/login')
+          router.push(`/login?id=${id}`)
         }
         console.log(result); // Handle the API response here
       } catch (error) {
