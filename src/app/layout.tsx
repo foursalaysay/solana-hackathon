@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 };
 
 
-const GoogleApiKey = process.env.NEXT_PUBLIC_GOOGLE_API;
+// const GoogleApiKey = process.env.NEXT_PUBLIC_GOOGLE_API;
 
 export default function RootLayout({
   children,
@@ -22,10 +22,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <script
+      {/* <script
         defer
         src={`https://maps.googleapis.com/maps/api/js?key=${GoogleApiKey}&libraries=places`}
-      ></script>
+      ></script> */}
       </head>
         <body className={inter.className}>
               {children}
