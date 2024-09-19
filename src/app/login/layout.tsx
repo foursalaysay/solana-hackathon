@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
 import { Toaster } from "sonner";
-
+import AppWalletProvider from "@/components/component/AppWalletProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,7 +13,7 @@ export const metadata: Metadata = {
 
 const GoogleApiKey = process.env.NEXT_PUBLIC_GOOGLE_API;
 
-export default function RootLayout({
+export default function LoginLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -28,8 +27,10 @@ export default function RootLayout({
       ></script>
       </head>
         <body className={inter.className}>
+            <AppWalletProvider>
               {children}
               <Toaster />
+            </AppWalletProvider>
           </body>
     </html>
   );
