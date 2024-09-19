@@ -41,9 +41,9 @@ const ConnectWalletButton = () => {
             const data = await checkPB.json();
             const { name } = data;
             if(!name){
-              router.push('/userdashboard')
+              router.push('/login/userdashboard')
             }else{
-              router.push(`/userdashboard/${getPBKey}`)
+              router.push(`/login/userdashboard/${getPBKey}`)
             }
             
           } else{
@@ -58,7 +58,7 @@ const ConnectWalletButton = () => {
     
             if (savePB.ok) {
               // Redirect to user dashboard after successful creation
-              router.push(`/userdashboard/${getPBKey}`);
+              router.push(`/login/userdashboard/${getPBKey}`);
             } else {
               const result = await savePB.json(); // Read the body of the POST request response
               toast.error(result.message || 'Failed to create participant.');
