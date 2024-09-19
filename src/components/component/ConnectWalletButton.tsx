@@ -1,16 +1,10 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import dynamic from 'next/dynamic'
 import { useWallet } from '@solana/wallet-adapter-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
-
-const WalletMultiButtonDynamic = dynamic(() =>
-    import('@solana/wallet-adapter-react-ui').then((mod) => mod.WalletMultiButton),
-    { ssr: false }
-);
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 
 
@@ -19,6 +13,7 @@ const ConnectWalletButton = () => {
   const router = useRouter();
   const wallet  = useWallet();
   const [hasName, setHasName ] = useState(false)
+  const [id, setId] = useState('')
 
   const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
 
@@ -39,7 +34,9 @@ const ConnectWalletButton = () => {
             // REDIRECT TO COMPLETE PROFILE FORM
   
             const data = await checkPB.json();
-            const { name } = data;
+            const { name, id } = data;
+            setId(id);
+
             if(name){
               setHasName(true)
             }else{
@@ -53,7 +50,7 @@ const ConnectWalletButton = () => {
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ publicKey: getPBKey }),
+              body: JSON.stringify({ id : id, publicKey: getPBKey }),
             });
     
             if (savePB.ok) {
@@ -74,7 +71,7 @@ const ConnectWalletButton = () => {
         saveUser()
       }
       
-  }, [wallet.publicKey, hasName, router]);
+  }, [wallet.publicKey, hasName,id, router]);
   
   return (
     <div className='w-72'>

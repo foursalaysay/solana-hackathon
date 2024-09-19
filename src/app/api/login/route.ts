@@ -9,7 +9,7 @@ export const POST = async (req: Request) => {
     await ConnectToDatabase();
   
     try {
-      const { publicKey } = await req.json(); // Ensure that the request contains valid JSON
+      const { publicKey, id } = await req.json(); // Ensure that the request contains valid JSON
   
       // Check if a participant with the same publicKey exists
       const existingParticipant = await prisma.participant.findUnique({
@@ -25,9 +25,13 @@ export const POST = async (req: Request) => {
       }
   
       // Create a new participant if no existing one is found
-      const participant = await prisma.participant.create({
+      const participant = await prisma.participant.update({
+        where: {
+          id: id, // assuming `id` is the identifier for the participant
+        },
         data: {
-          publicKey,
+          publicKey, // the new publicKey value
+          // other fields you want to update can be added here
         },
       });
   

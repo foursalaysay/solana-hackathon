@@ -60,8 +60,6 @@ const FormSchema = z.object({
       .optional(),
 })
 
-
-
 export function UserForm() {
 
   const [selectId, setSelectId] = useState("")
@@ -70,26 +68,25 @@ export function UserForm() {
   
   
   console.log(publicKey)
-  useEffect(() => {
-    async function getUserId(){
-      try {
-        const res = await fetch(`/api/userdashboard?publicKey=${publicKey}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+  // useEffect(() => {
+  //   async function getUserId(){
+  //     try {
+  //       const res = await fetch(`/api/userdashboard?publicKey=${publicKey}`, {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json'
+  //         }
+  //       });
 
-        const data = await res.json()
-        const userId  = data?.id;
-        setSelectId(userId);
-      } catch (error) {
-        toast.error('Id not Fetched!')
-      }
-        
-    }
-   getUserId()
-  },[publicKey])
+  //       const data = await res.json()
+  //       const userId  = data?.id;
+  //       setSelectId(userId);
+  //     } catch (error) {
+  //       toast.error('Id not Fetched!')
+  //     }   
+  //   }
+  //  getUserId()
+  // },[publicKey])
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -124,7 +121,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
      toast.success("Completed Profile!", {
       position : 'top-center'
      })
-     router.push(`/userdashboard/${publicKey}`)
+     router.push(`/login/userdashboard/${publicKey}`)
     }
   } catch (error) {
     console.error("Error saving donation:", error);
@@ -144,7 +141,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             <FormItem>
             <FormLabel>Name</FormLabel>
             <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="John Doe" {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -157,7 +154,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             <FormItem>
             <FormLabel>Address</FormLabel>
             <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="Oslob Cebu" {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -170,7 +167,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             <FormItem>
             <FormLabel>Age</FormLabel>
             <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="19" {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -207,9 +204,9 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
         name="sampleDisease"
         render={({ field }) => (
             <FormItem>
-            <FormLabel>Diease History</FormLabel>
+            <FormLabel>Disease History</FormLabel>
             <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="Diabetes" {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -262,7 +259,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             <FormItem>
             <FormLabel>Contact Email</FormLabel>
             <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="johndoe@gmail.com" {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -275,7 +272,7 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             <FormItem>
             <FormLabel>Contact Number</FormLabel>
             <FormControl>
-                <Input placeholder="shadcn" {...field} />
+                <Input placeholder="09********" {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
