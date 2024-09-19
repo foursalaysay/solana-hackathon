@@ -1,23 +1,11 @@
 'use client'
 
 import Link from "next/link"
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-
 import Logo from '../../../public/logo.png'
 import Image from "next/image"
 import ConnectWalletButton from "@/components/component/ConnectWalletButton"
 
 export default function LoginPage() {
-
-// const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
-// const [healthCode, setHealthCode ] = useState("");
-// const router = useRouter();
-// useEffect(() => {
-//   if(getHealthCode === healthCode){
-//     router.push("/healthofficer")
-//   }
-// })
 
   return (
     <div className="flex flex-col min-h-dvh">

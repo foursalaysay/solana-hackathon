@@ -18,6 +18,7 @@ const ConnectWalletButton = () => {
   const [hasPublicKey, setHasPublicKey ] = useState(false);
   const router = useRouter();
   const wallet  = useWallet();
+  const [hasName, setHasName ] = useState(false)
 
   const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
 
@@ -35,15 +36,14 @@ const ConnectWalletButton = () => {
           });
     
           if (checkPB.ok) {
-  
             // REDIRECT TO COMPLETE PROFILE FORM
   
             const data = await checkPB.json();
             const { name } = data;
-            if(!name){
-              router.push('/login/userdashboard')
+            if(name){
+              setHasName(true)
             }else{
-              router.push(`/login/userdashboard/${getPBKey}`)
+              setHasName(false)
             }
             
           } else{
@@ -58,7 +58,7 @@ const ConnectWalletButton = () => {
     
             if (savePB.ok) {
               // Redirect to user dashboard after successful creation
-              router.push(`/login/userdashboard/${getPBKey}`);
+              hasName ?  router.push(`/login/userdashboard/${getPBKey}`) : router.push('/login/userdashboard')
             } else {
               const result = await savePB.json(); // Read the body of the POST request response
               toast.error(result.message || 'Failed to create participant.');
@@ -74,7 +74,7 @@ const ConnectWalletButton = () => {
         saveUser()
       }
       
-  }, [wallet.publicKey,  router, getHealthCode]);
+  }, [wallet.publicKey, hasName, router]);
   
   return (
     <div className='w-72'>
