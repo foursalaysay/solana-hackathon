@@ -1,41 +1,23 @@
 'use client'
 
 import Link from "next/link"
-
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-
-
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
 import Logo from '../../../public/logo.png'
 import Image from "next/image"
 import ConnectWalletButton from "@/components/component/ConnectWalletButton"
-import { Button } from "@/components/ui/button"
 
-export default function LoginPage({isOfficer} : {isOfficer : false}) {
+export default function LoginPage() {
 
-
-const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
-const [healthCode, setHealthCode ] = useState("");
-const router = useRouter();
-
-useEffect(() => {
-  if(getHealthCode === healthCode){
-    router.push("/healthofficer")
-  }
-})
+// const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
+// const [healthCode, setHealthCode ] = useState("");
+// const router = useRouter();
+// useEffect(() => {
+//   if(getHealthCode === healthCode){
+//     router.push("/healthofficer")
+//   }
+// })
 
   return (
     <div className="flex flex-col min-h-dvh">
@@ -51,7 +33,7 @@ useEffect(() => {
           <p className="text-muted-foreground">Donate blood and gain bounties.</p>
           <div className="flex flex-col gap-5 justify-center items-center">
             {/* this is for connecting wallet */}
-            <ConnectWalletButton healthCode={healthCode}/>
+            <ConnectWalletButton/>
            
           </div>
         </div>
