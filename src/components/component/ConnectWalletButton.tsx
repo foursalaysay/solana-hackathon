@@ -11,28 +11,24 @@ import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 const ConnectWalletButton = () => {
   const [hasPublicKey, setHasPublicKey ] = useState(false);
   const router = useRouter();
-  const wallet  = useWallet();
+  const { publicKey }  = useWallet();
   const [hasName, setHasName ] = useState(false)
   const [id, setId] = useState('')
 
   const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
 
   useEffect(() => {
-    const getPBKey = wallet.publicKey;
 
       async function saveUser() {
         try {
-          // Check if the public key already exists
-          const checkPB = await fetch(`/api/login?publicKey=${getPBKey}`, {
+          const checkPB = await fetch(`/api/login?id=${id}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             },
           });
-    
+
           if (checkPB.ok) {
-            // REDIRECT TO COMPLETE PROFILE FORM
-  
             const data = await checkPB.json();
             const { name, id } = data;
             setId(id);
@@ -50,12 +46,12 @@ const ConnectWalletButton = () => {
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ id : id, publicKey: getPBKey }),
+              body: JSON.stringify({ id : id, publicKey: publicKey }),
             });
     
             if (savePB.ok) {
               // Redirect to user dashboard after successful creation
-              hasName ?  router.push(`/login/userdashboard/${getPBKey}`) : router.push('/login/userdashboard')
+              hasName ?  router.push(`/login/userdashboard/${publicKey}`) : router.push('/login/userdashboard')
             } else {
               const result = await savePB.json(); // Read the body of the POST request response
               toast.error(result.message || 'Failed to create participant.');
@@ -66,17 +62,13 @@ const ConnectWalletButton = () => {
           toast.error('Server Error');
         }
       }
-    
-      if(getPBKey){
-        saveUser()
-      }
-      
-  }, [wallet.publicKey, hasName,id, router]);
+        saveUser();
+  }, [publicKey, id,router, hasName]);
   
   return (
     <div className='w-72'>
         <WalletMultiButton className='w-full'>
-            {wallet.publicKey ? `${wallet.publicKey.toBase58().substring(0,8)}...` : "Connect Wallet"}
+            {publicKey ? `${publicKey.toBase58().substring(0,8)}...` : "Connect Wallet"}
         </WalletMultiButton>
     </div>
   )

@@ -12,17 +12,17 @@ export const POST = async (req: Request) => {
       const { publicKey, id } = await req.json(); // Ensure that the request contains valid JSON
   
       // Check if a participant with the same publicKey exists
-      const existingParticipant = await prisma.participant.findUnique({
+      const existingParticipant = await prisma.participant.findFirst({
         where: { publicKey },
       });
-  
-      if (existingParticipant) {
-        // If a participant exists, return a 409 Conflict status
+      
+      if (existingParticipant && existingParticipant.id !== id) {
         return NextResponse.json(
           { message: 'Participant with this publicKey already exists.' },
           { status: 409 }
         );
       }
+      
   
       // Create a new participant if no existing one is found
       const participant = await prisma.participant.update({
@@ -36,9 +36,9 @@ export const POST = async (req: Request) => {
       });
   
       return NextResponse.json(
-        { message: 'Participant added successfully', participant },
-        { status: 201 }
-      );
+        { message: 'Participant updated successfully', participant },
+        { status: 200 }
+      );      
     } catch (error) {
       console.error('Error saving participant:', error);
   
@@ -56,9 +56,9 @@ export const GET = async (req : Request) => {
         await ConnectToDatabase();
 
         const url = new URL(req.url);
-        const publicKey = url.searchParams.get("publicKey");
+        const id = url.searchParams.get("id");
 
-        if (!publicKey) {
+        if (!id) {
             return NextResponse.json({
                 message: "Invalid or missing publicKey"
             }, { status: 422 });
@@ -66,7 +66,7 @@ export const GET = async (req : Request) => {
 
         const participant = await prisma.participant.findUnique({
             where: {
-                publicKey: publicKey,
+                id: id,
             },
         });
 
