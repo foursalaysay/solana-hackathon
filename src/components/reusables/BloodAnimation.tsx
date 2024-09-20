@@ -81,7 +81,7 @@ export default function BloodAnimation() {
     }
    
   return (
-    <div className='flex flex-row w-full h-screen items-center justify-center'>
+    <div className='flex flex-row w-1/2 h-screen items-center justify-center'>
         <div className='flex flex-col items-center justify-center gap-3'>
             <iframe
             className='w-96 h-96 border-2 rounded-full'

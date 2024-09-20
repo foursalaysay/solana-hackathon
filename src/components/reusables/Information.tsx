@@ -8,7 +8,7 @@ import {
 
 export default function Information() {
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-2 w-1/2'>
         <h1>What&apos;s the Process?</h1>
          <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="item-1">
