@@ -14,11 +14,13 @@ export default function Home() {
   //   router.push("/login");
   // },[router])
   
+
   return (
     <div className="w-full flex flex-col">
       <div className="flex flex-row">
         <BloodAnimation />
         <Information />
+        
       </div>
         <Solflare />
     </div>
