@@ -50,7 +50,7 @@ export default function BloodAnimation() {
 
     const saveUser = async () => {
       try {
-        const res = await fetch('/api/participant ', {
+        const res = await fetch('/api/participant', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -1,75 +1,85 @@
-
-
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
 import { toast } from 'sonner';
-import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
-
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui';
+import { useRouter } from 'next/navigation';
 
 const ConnectWalletButton = () => {
-  const [hasPublicKey, setHasPublicKey ] = useState(false);
+  const [hasPublicKey, setHasPublicKey] = useState(false);
+  const [hasName, setHasName] = useState(false);
+  const { publicKey } = useWallet(); 
   const router = useRouter();
-  const { publicKey }  = useWallet();
-  const [hasName, setHasName ] = useState(false)
-  const { id } = router.query;
 
-  const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search); // Get the query params from URL
+    const id = params.get('id'); // Extract 'id' from query
+    if (id) {
+      setUserId(id); // Save it in the state
+    }
+  }, []);
 
-      async function saveUser() {
-        try {
-          const checkPB = await fetch(`/api/login?id=${id}`, {
-            method: 'GET',
+  useEffect(() => {
+    if (!publicKey) return; // If no publicKey, don't execute further
+
+    async function saveUser() {
+      try {
+        // Check if the user exists by querying with publicKey and userId
+        const checkPB = await fetch(`/api/login?userId=${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (checkPB.ok) {
+          const data = await checkPB.json();
+          const { name } = data;
+
+          setHasName(!!name);
+
+          // Redirect to user dashboard if name exists
+          if (name) {
+            router.push(`/login/userdashboard/${publicKey}`);
+          }
+        } else {
+          // Public key does not exist, so create a new participant
+          const savePB = await fetch('/api/login', {
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
+            body: JSON.stringify({ publicKey, userId}), // Ensure publicKey is converted to base58 string
           });
 
-          if (checkPB.ok) {
-            const data = await checkPB.json();
-            const { name } = data;
-
-            if(name){
-              setHasName(true)
-            }else{
-              setHasName(false)
-            }
-            
-          } else{
-            // Public key does not exist, so create a new participant
-            const savePB = await fetch('/api/login', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ id : id, publicKey: publicKey }),
-            });
-    
-            if (savePB.ok) {
-              // Redirect to user dashboard after successful creation
-              hasName ?  router.push(`/login/userdashboard/${publicKey}`) : router.push('/login/userdashboard')
-            } else {
-              const result = await savePB.json(); // Read the body of the POST request response
-              toast.error(result.message || 'Failed to create participant.');
-            }
+          if (savePB.ok) {
+            // Redirect to user dashboard after successful creation
+            const dashboardPath = hasName
+              ? `/login/userdashboard/${publicKey}`
+              : '/login/userdashboard';
+            router.push(dashboardPath);
+          } else {
+            const result = await savePB.json(); // Read the body of the POST request response
+            toast.error(result.message || 'Failed to create participant.');
           }
-        } catch (error) {
-          console.error('Error:', error);
-          toast.error('Server Error');
         }
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error('Server Error');
       }
-        saveUser();
-  }, [publicKey, id,router, hasName]);
-  
+    }
+
+    saveUser(); // Call the async function inside useEffect
+  }, [publicKey, userId, router, hasName]); // Ensure useEffect runs whenever these dependencies change
+
   return (
     <div className='w-72'>
-        <WalletMultiButton className='w-full'>
-            {publicKey ? `${publicKey.toBase58().substring(0,8)}...` : "Connect Wallet"}
-        </WalletMultiButton>
+      <WalletMultiButton className='w-full'>
+        {publicKey ? `${publicKey.toBase58().substring(0, 8)}...` : 'Connect Wallet'}
+      </WalletMultiButton>
     </div>
-  )
-}
-export default ConnectWalletButton
+  );
+};
+
+export default ConnectWalletButton;
