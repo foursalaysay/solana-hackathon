@@ -26,7 +26,7 @@ const ConnectWalletButton = () => {
     async function saveUser() {
       try {
         // Check if the user exists by querying with publicKey and userId
-        const checkPB = await fetch(`/api/login?publicKey=${publicKey}`, {
+        const checkPB = await fetch(`/api/login?id=${userId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
