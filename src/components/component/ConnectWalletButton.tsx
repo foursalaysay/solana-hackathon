@@ -50,7 +50,10 @@ const ConnectWalletButton = () => {
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ publicKey, userId}), // Ensure publicKey is converted to base58 string
+            body: JSON.stringify({ 
+              publicKey: publicKey ? publicKey.toBase58() : null, 
+              id: userId 
+            }), // Ensure publicKey is converted to base58 string
           });
 
           if (savePB.ok) {
