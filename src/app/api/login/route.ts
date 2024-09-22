@@ -51,9 +51,9 @@ export const GET = async (req : Request) => {
         await ConnectToDatabase();
 
         const url = new URL(req.url);
-        const userId = url.searchParams.get("userId");
+        const id = url.searchParams.get("id");
 
-        if (!userId) {
+        if (!id) {
             return NextResponse.json({
                 message: "Invalid or missing publicKey"
             }, { status: 422 });
@@ -61,7 +61,7 @@ export const GET = async (req : Request) => {
 
         const participant = await prisma.participant.findUnique({
             where: {
-              id : userId
+              id : id
             },
         });
 

@@ -26,12 +26,16 @@ const ConnectWalletButton = () => {
     async function saveUser() {
       try {
         // Check if the user exists by querying with publicKey and userId
-        const checkPB = await fetch(`/api/login?userId=${userId}`, {
+        const checkPB = await fetch(`/api/login?publicKey=${publicKey}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
         });
+
+        if(!checkPB){
+          toast.success('There is no record')
+        }
 
         if (checkPB.ok) {
           const data = await checkPB.json();

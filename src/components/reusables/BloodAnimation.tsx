@@ -37,8 +37,9 @@ export default function BloodAnimation() {
         });
     
         const result = await res.json();
+        console.log(result)
         if(res.ok){
-          const id = result.id;
+          const  { id } = result;
           toast.success('Officer Saved!')
           router.push(`/login?id=${id}`)
         }
@@ -61,8 +62,10 @@ export default function BloodAnimation() {
         });
     
         const result = await res.json();
+        console.log(result)
         if(res.ok){
-          const id = result.id;
+          const  { id } = result;
+
           toast.success('Participant Saved!')
           router.push(`/login?id=${id}`)
         }
