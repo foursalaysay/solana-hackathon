@@ -8,7 +8,7 @@ export const POST = async (req: Request) => {
   try {
     await ConnectToDatabase(); // Include this only if Prisma doesn't handle the connection
     
-    const { publicKey, id } = await req.json(); // Ensure that the request contains valid JSON
+    const { publicKey, userId } = await req.json(); // Ensure that the request contains valid JSON
     
     // Check if a participant with the same publicKey exists
     const existingParticipant = await prisma.participant.findUnique({
@@ -18,7 +18,7 @@ export const POST = async (req: Request) => {
     // If the participant doesn't exist, update the participant
     if (!existingParticipant) {
       const participant = await prisma.participant.update({
-        where: { id }, // Assuming `id` is the identifier for the participant
+        where: { id : userId }, // Assuming `id` is the identifier for the participant
         data: { publicKey }, // Update the publicKey field (add more fields if needed)
       });
 
