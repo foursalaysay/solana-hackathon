@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Separator } from '../ui/separator';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -19,15 +19,35 @@ import { Button } from '../ui/button';
 import { toast } from 'sonner';
 import { useWallet } from '@solana/wallet-adapter-react';
 import CreateDonationList from './CreateDonationList';
-import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 
-export default function DonationListCard({ donations }: { donations: Donation[] }) {
+export default function DonationListCard() {
+  const router = useRouter()
   const pathname = usePathname();
   const { publicKey } = useWallet();
   const publicKeyString = publicKey?.toBase58();
+
+
   const [isLoading, setIsLoading] = useState(false);  
   const [selectedDonationId, setSelectedDonationId] = useState("");
+  const [donation, setDonation] = useState<Donation[]>([])
+
+  useEffect(() => {
+    const getDonations = async () => {
+      const fetchData = await fetch('/api/donation',{
+        method: 'GET',
+        headers : {
+          'Content-Type' : 'application/json'
+        }
+      })
+
+      const data = await fetchData.json();
+      console.log(data)
+      setDonation(data);
+    }
+    getDonations()
+  })
 
   const handleConfirmParticipation = async () => {
 
@@ -104,9 +124,9 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
       <Separator />
      
       <div className='flex flex-wrap gap-5'>
-        {donations && donations.length > 0 ? (
-          donations.map((donation, index) => (
-            <div key={index} className='flex flex-col w-[320px] lg:w-[350px] border-2 border-black p-4 rounded-md'>
+        {donation && donation.length > 0 ? (
+          donation.map((donationEach) => (
+            <div key={donationEach.id} className='flex flex-col w-[320px] lg:w-[350px] border-2 border-black p-4 rounded-md'>
               <Image
                 className='self-center m-2 rounded-md'
                 src='/hospital.jpg'
@@ -121,7 +141,7 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
                   width={24}
                   height={24}
                 />
-                <p className='text-sm'>{new Date(donation.donationDate).toDateString()}</p>
+                <p className='text-sm'>{new Date(donationEach.donationDate).toDateString()}</p>
               </div>
               <div className='flex items-center justify-start gap-1'>
                 <Image
@@ -130,13 +150,28 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
                   width={24}
                   height={24}
                 />
-                <p className='text-sm'>{donation.address}</p>
+                <p className='text-sm'>{donationEach.address}</p>
               </div>
               <Separator className='mt-2'/>
               <div className='flex flex-col lg:flex-row justify-between gap-2 my-5'>
-                <p className='text-xs'>Total Participants: {donation.totalParticipants}</p>
-                <p className='text-xs'>Bounty Amount: {donation.bountyAmount}</p>
+                <p className='text-xs'>Total Participants: {donationEach.totalParticipants}</p>
+                <p className='text-xs'>Bounty Amount: {donationEach.bountyAmount}</p>
               </div>
+
+              {/* SHOW BUTTON IF HEALTH OFFICER */}
+
+              {pathname.includes('healthofficer') && (
+                <Button
+                variant='secondary'
+                onClick={() => {
+                  router.push(`/login/healthofficer/${donationEach.id}`)
+                }}
+                >
+                  View Donation Details
+                </Button>
+              )}
+
+              {/* SHOW BUTTON IF THIS IS DONOR */}
               {pathname.includes("userdashboard") && (
                 <Dialog
                 >
@@ -145,7 +180,7 @@ export default function DonationListCard({ donations }: { donations: Donation[] 
                       variant="default"
                       className='w-full bg-red-600 hover:bg-white hover:border-2 hover:border-redColor hover:text-redColor'
                       disabled={isLoading}
-                      onClick={() => setSelectedDonationId(donation.donationId)}
+                      onClick={() => setSelectedDonationId(donationEach.id)}
                     >
                       {isLoading ? 'Processing...' : 'Participate'}
                     </Button>
