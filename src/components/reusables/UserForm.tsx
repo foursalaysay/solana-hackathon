@@ -35,9 +35,10 @@ import { useEffect, useState } from "react"
 import { toast } from 'sonner'
 import { useWallet } from "@solana/wallet-adapter-react"
 
+
 const FormSchema = z.object({
     id : z.string(),
-    publicKey : z.string(),
+    publicKey : z.string().optional(),
     name : z.string().min(5, {
         message : "Name is required"
     }),
@@ -62,74 +63,64 @@ const FormSchema = z.object({
 
 export function UserForm() {
 
+
   const [selectId, setSelectId] = useState("")
-  const { publicKey } = useWallet();
+  const { publicKey, connected} = useWallet()
   const router = useRouter();
   
   
   console.log(publicKey)
-  // useEffect(() => {
-  //   async function getUserId(){
-  //     try {
-  //       const res = await fetch(`/api/userdashboard?publicKey=${publicKey}`, {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json'
-  //         }
-  //       });
 
-  //       const data = await res.json()
-  //       const userId  = data?.id;
-  //       setSelectId(userId);
-  //     } catch (error) {
-  //       toast.error('Id not Fetched!')
-  //     }   
-  //   }
-  //  getUserId()
-  // },[publicKey])
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-    id: selectId,
     name : "",
     address : "",
     gender : "",
     age : "",
     contactEmail : "",
     contactNumber : "",
-    sampleDisease : ""
+    sampleDisease : "",
+    diseaseHistory : []
     },
 })
 
 
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
 
-async function onSubmit(data: z.infer<typeof FormSchema>) {
-
-  try {
-    const response = await fetch(`/api/userdashboard?publicKey=${publicKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-
-    if(response.ok){
-      const result = await response.json();
-     toast.success("Completed Profile!", {
-      position : 'top-center'
-     })
-     router.push(`/login/userdashboard/${publicKey}`)
+    try {
+      // Convert publicKey to a string or handle cases where it's null
+      const pubKeyString = publicKey ? publicKey.toString() : "";
+    
+      if (!pubKeyString) {
+        toast.error('Public Key is missing!');
+        return;
+      }
+    
+      const response = await fetch(`/api/userdashboard?publicKey=${pubKeyString}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+    
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(result)
+        toast.success("Completed Profile!", {
+          position: 'top-center',
+        });
+        router.push(`/login/userdashboard/${pubKeyString}`);
+      } else {
+        toast.error('Profile not completed!');
+      }
+    } catch (error) {
+      console.error("Error saving donation:", error);
+      toast.error('Profile not completed!');
     }
-  } catch (error) {
-    console.error("Error saving donation:", error);
-   toast.error('Profile not completed!')
   }
-  }
-
- 
 
   return (
     <Form {...form}>
@@ -141,7 +132,11 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             <FormItem>
             <FormLabel>Name</FormLabel>
             <FormControl>
-                <Input placeholder="John Doe" {...field} />
+                <Input
+                  id="name"           // Add an id attribute for accessibility
+                  autoComplete="name" // Add an autocomplete attribute to help with autofill
+                  placeholder="John Doe"
+                  {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -154,7 +149,10 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             <FormItem>
             <FormLabel>Address</FormLabel>
             <FormControl>
-                <Input placeholder="Oslob Cebu" {...field} />
+                <Input
+                id="address"
+                autoComplete="address"
+                placeholder="Oslob Cebu" {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -167,7 +165,10 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             <FormItem>
             <FormLabel>Age</FormLabel>
             <FormControl>
-                <Input placeholder="19" {...field} />
+                <Input
+                id="age"
+                autoComplete="age"
+                placeholder="19" {...field} />
             </FormControl>
             <FormMessage />
             </FormItem>
@@ -278,7 +279,9 @@ async function onSubmit(data: z.infer<typeof FormSchema>) {
             </FormItem>
         )}
         />
-        <Button type="submit" className="w-full bg-redColor text-white hover:bg-white hover:text-redColor hover:border-2 hover:border-redColor" 
+        <Button
+         type="submit" 
+         className="w-full bg-redColor text-white hover:bg-white hover:text-redColor hover:border-2 hover:border-redColor" 
         >Submit</Button>
     </form>
     </Form>

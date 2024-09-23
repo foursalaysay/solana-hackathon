@@ -38,11 +38,6 @@ export default function LoginPage() {
             if(pbKey === publicKey){
                 setExistingParticipant(true)
                 setExistingName(name)
-                // if(!existingName){
-                //   router.push('/login/userdashboard')
-                // }else{
-                //   router.push(`/login/userdashboard/${publicKey}`)
-                // }
             }
             toast.success(data)
         }
