@@ -21,8 +21,7 @@ export default function BloodAnimation() {
     const [healthCode, setHealthCode] = useState('')
     const router = useRouter()
     const getHealthCode = process.env.NEXT_PUBLIC_OFFICER_CODE;
-
-
+    const [userId, setUserId] = useState('')
 
     const saveOfficer = async () => {
       try {
@@ -32,23 +31,27 @@ export default function BloodAnimation() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-              userType : 'HealthOfficer'
+            userType: 'HealthOfficer',
           }),
         });
     
         const result = await res.json();
-        console.log(result)
-        if(res.ok){
-          const  { id } = result;
-          toast.success('Officer Saved!')
-          router.push(`/login?id=${id}`)
+        setUserId(result.id)
+        console.log(result);
+    
+        if (res.ok && result.id) {  // Ensure id exists in the result
+          const { id } = result;
+          toast.success('Officer Saved!');
+          router.push(`/login?id=${userId}`);
+        } else {
+          toast.error('Error saving officer. Please try again.');
         }
-        console.log(result); // Handle the API response here
       } catch (error) {
         console.error('Error saving officer:', error);
+        toast.error('Error saving officer. Please try again.');
       }
     };
-
+    
     const saveUser = async () => {
       try {
         const res = await fetch('/api/participant', {
@@ -57,23 +60,27 @@ export default function BloodAnimation() {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-              userType : 'Participant'
+            userType: 'Participant',
           }),
         });
     
         const result = await res.json();
-        console.log(result)
-        if(res.ok){
-          const  { id } = result;
-
-          toast.success('Participant Saved!')
-          router.push(`/login?id=${id}`)
+        setUserId(result.id)
+        console.log(result);
+    
+        if (res.ok && result.id) {  // Ensure id exists in the result
+          const { id } = result;
+          toast.success('Participant Saved!');
+          router.push(`/login?id=${userId}`);
+        } else {
+          toast.error('Error saving participant. Please try again.');
         }
-        console.log(result); // Handle the API response here
       } catch (error) {
-        console.error('Error saving officer:', error);
+        console.error('Error saving participant:', error);
+        toast.error('Error saving participant. Please try again.');
       }
     };
+    
 
     const handleOfficerSubmission = () => {
       if(healthCode === getHealthCode) {

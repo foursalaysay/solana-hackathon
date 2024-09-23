@@ -1,77 +1,71 @@
 
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { ConnectToDatabase } from "../../../../helpers/server-helper";
 import prisma from "../../../../prisma";
 
 export const POST = async (req: Request) => {
   try {
-    await ConnectToDatabase(); // Include this only if Prisma doesn't handle the connection
-    
-    const { publicKey, userId } = await req.json(); // Ensure that the request contains valid JSON
-    
-    // Check if a participant with the same publicKey exists
+
+    const { publicKey, userType } = await req.json(); // Extract userId and publicKey from request
+
+    // Check if the participant exists
     const existingParticipant = await prisma.participant.findUnique({
-      where: { publicKey },
+      where: { publicKey }, // Search by publicKey
     });
 
-    // If the participant doesn't exist, update the participant
+    // If the participant exists, update it
     if (!existingParticipant) {
-      const participant = await prisma.participant.update({
-        where: { id : userId }, // Assuming `id` is the identifier for the participant
-        data: { publicKey }, // Update the publicKey field (add more fields if needed)
+      const saveParticipant = await prisma.participant.create({
+        data: { 
+          publicKey : publicKey,
+          userType : userType
+         },    // Update the publicKey field
       });
 
       return NextResponse.json(
-        { message: 'Participant updated successfully', participant },
+        { message: 'Participant updated successfully', participant: saveParticipant },
         { status: 200 }
       );
+    } else {
+      return NextResponse.json(
+        { message: 'Participant not found' },
+        { status: 404 }
+      );
     }
-
-    // Create a new participant if no existing one is found
-    const newParticipant = await prisma.participant.create({
-      data: { publicKey },
-    });
-
-    return NextResponse.json(
-      { message: 'New participant created successfully', newParticipant },
-      { status: 201 }
-    );
   } catch (error) {
     console.error('Error saving participant:', error);
     return NextResponse.json({ message: 'Server Error' }, { status: 500 });
   } finally {
-    await prisma.$disconnect(); // Always disconnect Prisma to prevent connection leaks
+    await prisma.$disconnect(); // Disconnect Prisma
   }
 };
-  
-export const GET = async (req : Request) => {
 
-    try{
-        await ConnectToDatabase();
 
-        const url = new URL(req.url);
-        const id = url.searchParams.get("id");
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const publicKey = searchParams.get('publicKey');
 
-        if (!id) {
-            return NextResponse.json({
-                message: "Invalid or missing publicKey"
-            }, { status: 422 });
-        }
+  // Check if `publicKey` was provided in the query params
+  if (!publicKey) {
+    return NextResponse.json({ message: 'Public key is required' }, { status: 400 });
+  }
 
-        const participant = await prisma.participant.findUnique({
-            where: {
-              id : id
-            },
-        });
+  try {
+    // Fetch the participant from the database using Prisma and the provided publicKey
+    const participant = await prisma.participant.findUnique({
+      where: { publicKey },
+    });
 
-        return NextResponse.json({participant}, {status: 200})
-
-    }catch (error) {
-        console.log(error)
-    
-        return NextResponse.json({
-            message : "Server Error : GET METHOD"
-        }, {status : 500})
+    // If no participant is found, return a 404 error
+    if (!participant) {
+      return NextResponse.json({ message: 'Participant not found' }, { status: 404 });
     }
+
+    // Return the participant data as a JSON response
+    return NextResponse.json({ message: 'Participant found', participant }, { status: 200 });
+  } catch (error) {
+    console.error('Error fetching participant:', error);
+    return NextResponse.json({ message: 'Server error' }, { status: 500 });
+  }
 }

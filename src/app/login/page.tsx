@@ -4,6 +4,7 @@ import Link from "next/link"
 import Logo from '../../../public/logo.png'
 import Image from "next/image"
 import ConnectWalletButton from "@/components/component/ConnectWalletButton"
+import OfficerDialog from "@/components/reusables/OfficerDialog"
 
 export default function LoginPage() {
 
@@ -22,6 +23,7 @@ export default function LoginPage() {
           <div className="flex flex-col gap-5 justify-center items-center">
             {/* this is for connecting wallet */}
             <ConnectWalletButton/>
+            <OfficerDialog />
            
           </div>
         </div>
