@@ -15,6 +15,7 @@ import {
 import { Button } from '../ui/button'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useRouter } from 'next/navigation'
+import { Connection } from '@solana/web3.js'
 
 
 
@@ -80,6 +81,7 @@ export default function OfficerDialog() {
     <Dialog>
         <DialogTrigger asChild>
         <Button
+        disabled={!connected}
     className='w-96 h-20 text-2xl hover:bg-white hover:text-red-500 hover:border-2 hover:border-red-500'
     >
         Health Officer

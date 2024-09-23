@@ -35,19 +35,22 @@ export default function DonationListCard() {
 
   useEffect(() => {
     const getDonations = async () => {
-      const fetchData = await fetch('/api/donation',{
+      const res = await fetch('/api/donation',{
         method: 'GET',
         headers : {
           'Content-Type' : 'application/json'
         }
       })
 
-      const data = await fetchData.json();
-      console.log(data)
-      setDonation(data);
+      if(res.ok){
+        const data = await res.json();
+        console.log(data)
+        setDonation(data);
+      }
+      
     }
     getDonations()
-  })
+  },[])
 
   const handleConfirmParticipation = async () => {
 
@@ -126,7 +129,7 @@ export default function DonationListCard() {
       <div className='flex flex-wrap gap-5'>
         {donation && donation.length > 0 ? (
           donation.map((donationEach) => (
-            <div key={donationEach.id} className='flex flex-col w-[320px] lg:w-[350px] border-2 border-black p-4 rounded-md'>
+            <div key={donationEach.id} className='flex flex-col w-[320px] lg:w-[350px] border-2 border-gray-700 p-4 rounded-md'>
               <Image
                 className='self-center m-2 rounded-md'
                 src='/hospital.jpg'
@@ -162,6 +165,7 @@ export default function DonationListCard() {
 
               {pathname.includes('healthofficer') && (
                 <Button
+                className='bg-gray-900 text-white hover:text-red-600 hover:border-2 hover:border-red-600'
                 variant='secondary'
                 onClick={() => {
                   router.push(`/login/healthofficer/${donationEach.id}`)
